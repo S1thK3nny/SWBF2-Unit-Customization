@@ -1,0 +1,28 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"turret_icon"
+		"hud_all_lascannon_icon"
+		"hud_enclosedturret_icon"
+	}
+	REQN
+	{
+		"model"
+		"com_weap_gunturret"
+	}
+	REQN
+	{
+		"class"
+		"tur_bldg_laser_exp"
+		"tur_weap_laser"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_smokeplume"
+	}
+}

@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel = "building"
+geometryName = "cameraObj.msh"
+geometryScale = 0.033
+collisionName = "cameraObj.msh"
+unitName = "cameraObj"

@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_chaingun"
+		"tur_weap_chaingun_ord"
+	}
+}

@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_multilasers"
+		"spa_laser_turret_ord"
+	}
+}

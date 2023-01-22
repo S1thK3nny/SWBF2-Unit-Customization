@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_lightning1"
+		"com_sfx_lightning2"
+		"com_sfx_lightning3"
+	}
+}

@@ -1,0 +1,16 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"gam_1st_weap_inf_axe"
+		"tat3_prop_table"
+		"tat3_bldg_rust"
+		"tat3_bldg_cell_04"
+		"tat3_bldg_cell_01"
+		"tat3_bldg_cell_03"
+		"tat3_bldg_cell"
+		"tat3_bldg_cell_02"
+	}
+}

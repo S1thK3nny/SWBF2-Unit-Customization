@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="Terrain2" skinned="no" vertexcolor="always" texcoord="never">
+
+
+	<vertexshader name="vs1_medq_allinone" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		
+		; transform 4 texture coordinates
+		
+		mad oT0.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+0].xy, c[C_CUSTOM_MIN+0].zw
+		mov oT0.zw, c[C_CONST0].xz
+
+		mad oT1.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+1].xy, c[C_CUSTOM_MIN+1].zw
+		mov oT1.zw, c[C_CONST0].xz
+
+		mad oT2.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+2].xy, c[C_CUSTOM_MIN+2].zw
+		mov oT2.zw, c[C_CONST0].xz
+
+		mad oT3.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+3].xy, c[C_CUSTOM_MIN+3].zw
+		mov oT3.zw, c[C_CONST0].xz
+
+		mov oD0, c[C_CONST0]
+		mov oD1, c[C_CONST0]
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<vertexshader name="vs1_allinone" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		
+		; transform 4 texture coordinates
+
+		mad oT0.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+0].xy, c[C_CUSTOM_MIN+0].zw
+		mad oT1.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+1].xy, c[C_CUSTOM_MIN+1].zw
+		mad oT2.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+2].xy, c[C_CUSTOM_MIN+2].zw
+		mad oT3.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+3].xy, c[C_CUSTOM_MIN+3].zw
+		mad oT4.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+4].xy, c[C_CUSTOM_MIN+4].zw
+		;mad oT5.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+5].xy, c[C_CUSTOM_MIN+5].zw
+		;mad oT6.xy, R_WORLD_POS.zx, c[C_CUSTOM_MIN+6].xy, c[C_CUSTOM_MIN+6].zw
+
+		
+		mov oD0, c[C_CONST0]
+		mov oD1, c[C_CONST0]
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_meq_allinone" target="ps_1_1">
+		def c0, 1, 0, 0, 0
+		def c1, 0, 1, 0, 0
+		def c2, 0, 0, 1, 0
+		def c3, 0, 0, 0, 1
+
+		tex t0	; blend map
+		tex t1	; diffuse map 1
+		tex t2	; diffuse map 2
+		tex t3	; diffuse map 3
+		
+		;mad_sat r0, c1.a, t1_bx2, t0
+		;mad_sat r0, c2.a, t2_bx2, r0
+		;mad_sat r0, c3.a, t3_bx2, r0
+
+	
+		mov_sat r1, t0.a
+		lrp r0, r1, t1, t2
+		
+		dp3_sat r1, c0, t0	
+		lrp r0, r1.a, r0, t3
+		
+	</pixelshader>
+
+	<pixelshader name="ps2_medq_blend4" target="ps_2_0">
+		
+		def c0, 2.0, 1.8, 0.1, -1.0
+		def c11, 0.5, 0.3, 0.2, 3.0
+		def c12, 1.8, -0.2, 0.4, 3.0
+
+		def c9, 0.4, 0.33, 0.33, 0.33
+		def c10, 3.8, 4.2, 4.1, 3.9
+		
+		dcl_2d s0.rgba ; base map (height, slope, fbm1, fbm2)
+		dcl_2d s1.rgba ; noise/detail map
+
+		dcl_2d s2.rgba ; diffuse/spec map 1
+		dcl_2d s3.rgba ; diffuse/spec map 2
+		dcl_2d s4.rgba ; diffuse/spec map 3
+		dcl_2d s5.rgba ; diffuse/spec map 4
+		
+		dcl t0.xy ; base map coords
+		dcl t1.xy ; detail coords 1
+		dcl t2.xy ; detail coords 2
+		dcl t3.xy ; detail coords 3
+		dcl t4.xy ; tiling map coords 1
+		dcl t5.xyz ; tiling map coords 1
+		
+		texld r0, t0, s0
+		
+		mad r0, r0, c12.r, c12.g
+		
+		mov r9, c0
+	
+		texld r1, t1, s1	; detail pass 1
+		mad r1, r1, r9.r, r9.a
+		mad r0, r1, c11.r, r0
+
+		texld r2, t2, s1	; detail pass 2
+		mad r1, r1, r9.r, r9.a
+		mad r0, r1, c11.g, r0
+
+		texld r3, t3, s1	; detail pass 3
+		mad r1, r1, r9.r, r9.a
+		mad r0, r1, c11.b, r0
+		
+		sub_sat r0, r0, c9
+		mul_sat r0, r0, c10
+
+
+		<!--
+		mov r0, r0.r
+		mov r0.a, c0.g
+		mov oC0, r0
+		-->
+
+		<!--
+		-->
+		texld r4, t4, s2 ; blend map 1
+
+		texld r5, t4, s3 ; blend map 2		
+		lrp r6, r0.r, r5, r4
+
+		texld r7, t4, s4 ; blend map 3
+		lrp r4, r0.g, r7, r6
+	
+		texld r8, t4, s5 ; blend map 4
+		lrp r6, r0.b, r8, r4
+		
+		
+		mov r6.xyz, t5
+		
+		mov r6.a, c0.g
+		mov oC0, r6
+		
+	
+				
+	</pixelshader>
+
+
+	<pixelshader name="ps2_hiq_blend4_nm" target="ps_2_0">
+		def c0, 2.0, 1.0, 0.0039215, -1.0
+		def c1, 0.4, 0.6, 0.7, 0.3
+		def c2, 60.8, 0.5, 0.7, 0.3
+
+		dcl_2d s0 ; ambient normal map
+		dcl_2d s1.rgba ; fractal control map
+		dcl_2d s2.rgba ; noise/detail map
+
+		dcl_2d s3.rgba ; diffuse/spec map 1
+		dcl_2d s4.rgba ; diffuse/spec map 2
+		dcl_2d s5.rgba ; diffuse/spec map 3
+		dcl_2d s6.rgba ; diffuse/spec map 4
+		
+		dcl t0.xy ; base map coords
+		dcl t1.xy ; detail coords 1
+		dcl t2.xy ; detail coords 2
+		dcl t3.xy ; detail coords 3
+		dcl t4.xy ; tiling map coords 1
+
+		texld r0, t0, s0 ; normal in to r0
+		
+		mov r1, c0
+		mad r0, r0, r1.r, r1.a
+		
+		nrm r1, r0
+
+		dp3_sat r0, r1, c1
+		
+		mov r1, c2
+		mad r0, r0, r1.b, r1.a
+
+
+		mov r0.a, c0.g
+		mov oC0, r0
+
+	</pixelshader>
+
+	<pixelshader name="ps2_hiq_blend4" target="ps_2_0">
+		
+		def c0, 2.0, 1.0, 0.0039215, -1.0
+
+		def c2, 0.6, 0.5, 0.4, 0.0065 ; roughness values
+
+		; layer weights: height, fbm, fbm, normal.z(slope)
+
+		def c3, -0.30, 0.50, 0.40, 0.30 ; layer 2 min values
+		def c4,  1.30, 1.19, 1.19, 1.50 ; layer 2 max values
+
+		def c5, -0.30, 0.00, 0.10, 0.70 ; layer 1 min values
+		def c6,  0.30, 0.85, 0.90, 1.50 ; layer 1 max values
+
+		def c7,  0.15, 0.00, 0.10, 0.15 ; layer 3 min values
+		def c8,  1.30, 0.65, 0.90, 1.50 ; layer 3 max values
+		
+		def c11, 0.4, 0.6, 0.7, 0.3
+		def c12, 60.8, 0.5, 0.7, 0.3
+		
+		dcl_2d s0 ; height map (at least 16-bit)
+		dcl_2d s1.rgba ; fractal control map
+		dcl_2d s2.rgba ; noise/detail map
+
+		dcl_2d s3.rgba ; diffuse/spec map 1
+		dcl_2d s4.rgba ; diffuse/spec map 2
+		dcl_2d s5.rgba ; diffuse/spec map 3
+		dcl_2d s6.rgba ; diffuse/spec map 4
+		
+		dcl t0.xy ; base map coords
+		dcl t1.xy ; base map coords + du
+		dcl t2.xy ; base map coords + dv
+		dcl t3.xy ; detail coords 1
+		dcl t4.xy ; detail coords 2
+		dcl t5.xy ; detail coords 3
+		dcl t6.xy ; tiling map coords 1
+
+		
+		texld r0, t0, s0 ; height in to r0
+		
+		texld r3, t0, s1 ; control map into r3
+
+		mov r5, c0
+
+		texld r4, t3, s2 ; detail map into r4			
+		mad r4, r4, c0.r, r5.a	; height detail map coeff				
+		mul r5.r, r3.r, c2.a		; control map height scaling
+		mad r0.r, r5.r, r4, r0 ; add in detail level
+		mad r4, c2.r, r4, r3
+
+		texld r6, t4, s2 ; detail map into r6
+		mad r6, r6, c0.r, r5.a	; height detail map coeff				
+		mul r5.r, r5.r, c12.g		; control map height scaling
+		mad r0.r, r5.r, r6, r0 ; add in detail level
+		mad r4, c2.g, r6, r4
+
+		texld r7, t5, s2 ; detail map into r6
+		mad r7, r7, c0.r, r5.a	; height detail map coeff				
+		mul r5.r, r5.r, c12.g		; control map height scaling
+		mad r0.r, r5.r, r7, r0 ; add in detail level
+		mad r4, c2.b, r7, r4
+				
+		mov r0.rgb, r0.r
+		
+		texld r1, t1, s0			
+		texld r2, t2, s0
+
+		mov r1.g, r2.r		
+		mov r1.b, c0.b
+						
+		sub r1, r0, r1
+		mul r1, r1, c1 ; multiply by fNormalScale
+				
+		mov r1.b, c0.g
+		
+		nrm r2, r1; normalize resulting vector
+		
+		dp3_sat r3, r2, c11
+		
+		mov r11, c12
+		mad r3, r3, r11.b, r11.a
+		
+		;r0 - height, r2 - normal, r3 - lighting, r4 - control
+
+		
+		;r4 is overall blend values
+		mov r4.r, r0.r
+		mov r4.a, r2.b
+		
+
+		
+		<!--
+		float dh_dx = (MyTerrain.GetHeight(x2, y1) - MyTerrain.GetHeight(x0, y1))*fNormalScale;
+		float dh_dz = (MyTerrain.GetHeight(x1, y2) - MyTerrain.GetHeight(x1, y0))*fNormalScale;
+		mypatch.avNormal[jj*iZOffset + ii] = Normalize(HandyVector3(-dh_dx, 1.0f, -dh_dz));
+		-->
+		
+		texld r8, t6, s3
+		
+		sub_sat r6, r4, c3
+		sub_sat r5, c4, r4
+		mul_sat r6, r5, r6
+		mul_sat r6, r6, c12.r
+		mul_sat r5, r6.r, r6.g
+		mul_sat r5, r5, r6.a
+		
+		texld r9, t6, s4 ; blend map 2		
+		lrp r1, r5.a, r9, r8
+
+	
+		sub_sat r6, r4, c5
+		sub_sat r5, c6, r4
+		mul_sat r6, r5, r6
+		mul_sat r6, r6, c12.r
+		mul_sat r5, r6.r, r6.b
+		mul_sat r5, r5, r6.a
+		
+		texld r10, t6, s5 ; blend map 3
+		lrp r9, r5.a, r10, r1
+
+
+		sub_sat r6, r4, c7
+		sub_sat r5, c8, r4
+		mul_sat r6, r5, r6
+		mul_sat r6, r6, c12.r
+		mul_sat r5, r6.r, r6.g
+		mul_sat r5, r5, r6.a
+		
+		texld r11, t6, s6 ; blend map 3
+		lrp r1, r5.a, r11, r9
+		
+		mul r0, r1, r3
+		mov r0, r3
+
+		<!--		
+
+		texld r4, t4, s2 ; blend map 1
+
+		sub r1, r0, c1
+		mul_sat r2, r1, c2
+		mul_sat r3, r1, c3
+		
+		dp4 r2, r0, c4
+		add r2, r2, c5.r
+		mul_sat r3, r2, c5.g	
+
+		texld r5, t4, s3 ; blend map 2		
+		lrp r6, r3.a, r5, r4
+
+
+		dp4 r2, r0, c6
+		add r2, r2, c7.r
+		mul_sat r3, r2, c7.g	
+
+		texld r7, t4, s4 ; blend map 3
+		lrp r4, r3.a, r7, r6
+
+
+		dp4 r2, r0, c8
+		add r2, r2, c9.r
+		mul_sat r3, r2, c9.g	
+		
+		texld r8, t4, s5 ; blend map 4
+		lrp r6, r3.a, r8, r4
+		-->
+
+		mov r0.a, c0.g
+		mov oC0, r0
+
+
+
+		<!--
+		-->
+		
+				
+	</pixelshader>
+	
+<!--
+	<vertexshader name="vs1_hiq_noiseblend" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates for FBM map inputs
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_CUSTOM_MIN+7]
+		dp4 oT3.y, R_WORLD_POS, c[C_CUSTOM_MIN+8]
+		mov oT3.zw, c[C_CONST0].xz
+
+		mov oD0, c[C_CONST0]
+		mov oD1, c[C_CONST0]
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+	
+	-->
+
+	<pixelshader name="ps1_hiq_mad_FBM" target="ps_1_1">
+
+		tex t0	; base blend map 0
+		tex t1	; noise detail map 1
+		tex t2	; noise detail map 2
+		tex t3	; noise detail map 3
+
+		mov r0, t0
+		
+		mad_sat r1, r0, c0, c1
+		mad_sat r0, t1_bx2, r1, r0
+
+		mad_sat r1, r0, c2, c3
+		mad_sat r0, t2_bx2, r1, r0
+
+		mad_sat r1, r0, c4, c5
+		mad_sat r0, t3_bx2, r1, r0	
+					
+	</pixelshader>
+
+
+	<pixelshader name="ps1_hiq_blend_FBM" target="ps_1_1">
+
+		tex t0	; base blend map 0
+		tex t1	; noise detail map 1
+		tex t2	; noise detail map 2
+		tex t3	; noise detail map 3
+
+		mov r0, t0
+		
+		mad_sat r1, r0, c0, c1
+		mad_sat r0, t1_bx2, r1, r0
+
+		mad_sat r1, r0, c2, c3
+		mad_sat r0, t2_bx2, r1, r0
+
+		mad_sat r1, r0, c4, c5
+		mad_sat r0, t3_bx2, r1, r0	
+					
+	</pixelshader>
+
+
+	<pipeline id="1">
+		<!--medq_allinone:
+			blend map, 2 diffuse volume maps, bump volume maps -->
+		<state id="0">
+			<pass transform="position" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_medq_allinone"/>
+				<pixelshader use="ps1_meq_allinone"/>
+			</pass>
+		</state>
+	</pipeline>
+
+	<pipeline id="2">
+		<state id="0">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_allinone"/>
+				<pixelshader use="ps2_medq_blend4"/>
+			</pass>
+		</state>
+		<state id="1">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_allinone"/>
+				<pixelshader use="ps2_hiq_blend4_nm"/>
+			</pass>
+		</state>
+	</pipeline>
+	
+
+</shader>

@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"common_bldg_commandpost"
+		"common_bldg_commandpost_bump"
+	}
+}

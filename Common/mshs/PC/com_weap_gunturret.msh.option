@@ -1,0 +1,1 @@
+-keep turret_main main_cylinder -bump com_bldg_minigun com_bldg_minigun_turret

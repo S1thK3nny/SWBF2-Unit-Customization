@@ -1,0 +1,13 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_pit_bone"
+		"tat3_bldg_pit_metal_a"
+		"tat3_bldg_cell_03"
+		"tat3_bldg_pit_rockwall_a"
+		"tat3_bldg_pit_detail"
+	}
+}

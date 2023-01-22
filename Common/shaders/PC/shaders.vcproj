@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="pcShaders"
+	ProjectGUID="{B4D705DF-21B2-46B2-A616-F32DF0D6C4D0}"
+	SccProjectName="&quot;//Battlefront2/main/data/Common/shaders/PC&quot;"
+	SccAuxPath=""
+	SccLocalPath="."
+	SccProvider="MSSCCI:Perforce SCM"
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="1"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="5"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/Shaders.exe"
+				LinkIncremental="2"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/Shaders.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="1"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				OmitFramePointers="TRUE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				StringPooling="TRUE"
+				RuntimeLibrary="4"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/Shaders.exe"
+				LinkIncremental="1"
+				GenerateDebugInformation="TRUE"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Custom Shaders"
+			Filter="">
+			<File
+				RelativePath=".\decal_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\filtercopy_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="flare_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\hdr_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="interface_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="lightbeam_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="normal_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\normal_terrain_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="normalmapadder_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="ocean_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="particle_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\perpixeldiffuselighting_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="prereflection_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="rain_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="refraction_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="sample_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="shadowquad_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\shield_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="skyfog_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\specularlighting_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="stencilshadow_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="terrain_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\terrain_shader2.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="water_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\zprepass_shader.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Shader File $(InputName)"
+						CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+						Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+				</FileConfiguration>
+			</File>
+			<Filter
+				Name="DEPRECATED"
+				Filter="">
+				<File
+					RelativePath=".\bump_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="detail_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="foliage_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\pervertexdiffuselighting_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="scroll_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="specular_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="sprite_shader.xml">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Compiling Shader File $(InputName)"
+							CommandLine="pc_ShaderCompiler $(InputPath) $(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader -I $(ProjectDir)\..\..\..\..\RedEngineFL\Graphics\PC\"
+							Outputs="$(InputDir)..\..\..\_BUILD\Common\MUNGED\PC\$(InputName).shader"/>
+					</FileConfiguration>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="include"
+			Filter="">
+			<File
+				RelativePath="debug_shader.vsh">
+			</File>
+			<File
+				RelativePath="pcRedVertexShaderConstants.h">
+			</File>
+			<File
+				RelativePath="pcRedVertexShaderMacros.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Fragment Files"
+			Filter="">
+			<File
+				RelativePath="lighting_diffuse.h">
+			</File>
+			<File
+				RelativePath="lighting_diffusespecular.h">
+			</File>
+			<File
+				RelativePath="lighting_specular.h">
+			</File>
+			<File
+				RelativePath="transform_hard_skinned.h">
+			</File>
+			<File
+				RelativePath="transform_skinned.h">
+			</File>
+			<File
+				RelativePath="transform_unskinned.h">
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -1,0 +1,27 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"turret_icon"
+	}
+	REQN
+	{
+		"model"
+		"com_bldg_chaingun_tripod"
+		"com_bldg_chaingun_tripod_dest"
+	}
+	REQN
+	{
+		"class"
+		"com_inf_rechargedroid_exp"
+		"tur_weap_chaingun_auto"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_smokeplume"
+	}
+}

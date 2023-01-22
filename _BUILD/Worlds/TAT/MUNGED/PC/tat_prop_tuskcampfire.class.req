@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat1_prop_tuskcampfire"
+	}
+	REQN
+	{
+		"config"
+		"torchflame"
+	}
+	REQN
+	{
+		"class"
+		"yellowlight_nocone"
+	}
+}

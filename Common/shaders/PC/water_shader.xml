@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="water" skinned="no" debuginfo="no">
+
+	<vertexshader name="vs_transmissive_pass_fade" target="vs_1_1">			
+	#include "pcRedVertexShaderConstants.h"
+	#include "pcRedVertexShaderMacros.h"
+
+	; project the position
+	POS_PROJECT(oPos)
+
+	// fade in the water
+	dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+	mad oT0, R_TEMP.z, c[C_CUSTOM_MIN+1].z, c[C_CUSTOM_MIN+1].w
+	FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs_lowquality" target="vs_1_1">
+	// Constants
+	// 0	=>  constants = [0.0f, 0.5f, -0.5f, 0.0f]
+	// 1	=>	fade constants
+	// 2	=>	light direction pointing toward the light source (w = specular power)
+	// 3-4	=>	tex matrix 1
+	// 5-6  =>  tex matrix 2
+	// 7-8	=>	tex matrix 3
+	// 9-10 =>  tex matrix 4
+	
+	#include "pcRedVertexShaderConstants.h"
+	#include "pcRedVertexShaderMacros.h"
+
+	#define R_VIEW_VEC		r5
+	#define R_HALF_VEC		r6
+	#define R_WORLD_NORMAL	r11
+
+	; transform normal to world space
+	dp3 R_WORLD_NORMAL.x, R_NORMAL, c[C_OBJ_WORLD_M0]
+	dp3 R_WORLD_NORMAL.y, R_NORMAL, c[C_OBJ_WORLD_M1]
+	dp3 R_WORLD_NORMAL.z, R_NORMAL, c[C_OBJ_WORLD_M2]
+
+	; calculate the direction from the vertex to the eye
+	add R_VIEW_VEC.xyz, c[C_WORLD_VIEWPOS].xyz, -R_WORLD_POS.xyz		
+	dp3 R_VIEW_VEC.w, R_VIEW_VEC.xyz, R_VIEW_VEC.xyz
+	rsq R_TEMP1.x, R_VIEW_VEC.w	
+	mul R_VIEW_VEC.xyz, R_VIEW_VEC.xyz, R_TEMP1.x
+
+	; calculate the half vector
+	add R_HALF_VEC.xyz, R_VIEW_VEC.xyz, c[C_CUSTOM_MIN+2].xyz
+	dp3 R_TEMP.w, R_HALF_VEC.xyz, R_HALF_VEC.xyz
+	rsq R_TEMP1.x, R_TEMP.w	
+	mul R_HALF_VEC.xyz, R_HALF_VEC.xyz, R_TEMP1.x
+	
+	; calculate the specular value
+	dp3 R_TEMP.x, R_WORLD_NORMAL, c[C_CUSTOM_MIN+2]		// N.L
+	dp3 R_TEMP.y, R_HALF_VEC, R_WORLD_NORMAL			// N.H
+	mov R_TEMP.w, c[C_CUSTOM_MIN+2].w					// specular power
+	lit R_TEMP, R_TEMP									// R_TEMP.z has output specular value
+	mov oD1.xyz, R_TEMP.zzz
+
+	; project the position
+	POS_PROJECT(oPos)
+	
+	; decompress texcoords
+	mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+
+	; transform texture coordinates
+	dp4 oT0.x, R_TEMP, c[C_CUSTOM_MIN+3]
+	dp4 oT0.y, R_TEMP, c[C_CUSTOM_MIN+4]
+	mov oT0.zw, c[C_CONST0].xz
+
+	; transform 2nd texture coordinates
+	dp4 oT1.x, R_TEMP, c[C_CUSTOM_MIN+5]
+	dp4 oT1.y, R_TEMP, c[C_CUSTOM_MIN+6]
+	mov oT1.zw, c[C_CONST0].xz
+
+	; transform 3rd texture coordinates
+	dp4 oT2.x, R_TEMP, c[C_CUSTOM_MIN+7]
+	dp4 oT2.y, R_TEMP, c[C_CUSTOM_MIN+8]
+	mov oT2.zw, c[C_CONST0].xz
+
+	; transform 4th texture coordinates
+	dp4 oT3.x, R_TEMP, c[C_CUSTOM_MIN+9]
+	dp4 oT3.y, R_TEMP, c[C_CUSTOM_MIN+10]
+	mov oT3.zw, c[C_CONST0].xz
+
+	; fade and fog
+	dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+	mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+1].z, c[C_CUSTOM_MIN+1].w
+	max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+	mov oD0.xyz, c[C_HDR].zzz
+	min oD0.w, R_TEMP.w, c[C_CONST0].z
+	FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs_projective_normal_map" target="vs_1_1">
+	// Constants
+	// 0	=>  constants = [0.0f, 0.5f, -0.5f, 0.0f]
+	// 1	=>	fade constants
+	// 2	=>  light direction pointing toward the light source
+	// 3-4	=>	bump matrix
+
+	#include "pcRedVertexShaderConstants.h"
+	#include "pcRedVertexShaderMacros.h"
+
+	#define R_VIEW_VEC		r7
+	#define R_HALF_VEC		r8
+	#define R_WORLD_NORMAL	r11
+		
+	; transform normal to world space
+	dp3 R_WORLD_NORMAL.x, R_NORMAL, c[C_OBJ_WORLD_M0]
+	dp3 R_WORLD_NORMAL.y, R_NORMAL, c[C_OBJ_WORLD_M1]
+	dp3 R_WORLD_NORMAL.z, R_NORMAL, c[C_OBJ_WORLD_M2]
+
+	; calculate the direction from the vertex to the eye
+	add R_VIEW_VEC.xyz, c[C_WORLD_VIEWPOS].xyz, -R_WORLD_POS.xyz		
+	dp3 R_VIEW_VEC.w, R_VIEW_VEC.xyz, R_VIEW_VEC.xyz
+	rsq R_TEMP1.x, R_VIEW_VEC.w	
+	mul R_VIEW_VEC.xyz, R_VIEW_VEC.xyz, R_TEMP1.x
+
+	// put the biased view vector in oD0
+	mad oD0.xyz, R_VIEW_VEC.xzy, c[C_CONST0].yyy, c[C_CONST0].yyy
+
+	; calculate the half vector
+	add R_HALF_VEC.xyz, R_VIEW_VEC.xyz, c[C_CUSTOM_MIN+2].xyz
+	dp3 R_TEMP.w, R_HALF_VEC.xyz, R_HALF_VEC.xyz
+	rsq R_TEMP1.x, R_TEMP.w	
+	mul R_HALF_VEC.xyz, R_HALF_VEC.xyz, R_TEMP1.x
+
+	// put the half vector in t3 which will be normalized by a cubemap and put 1 in w coordinate
+	mad oT1.xyzw, R_HALF_VEC.xzyw, c[C_CONST0].zzzx, c[C_CONST0].xxxz		
+
+	; project the position
+	POS_PROJECT(R_TEMP)
+
+	mov oPos, R_TEMP
+	
+	; write projected texture coordinates
+	dp3 R_TEMP1.x, R_TEMP.xyw, c[C_CUSTOM_MIN].yxy
+	dp3 R_TEMP1.y, R_TEMP.xyw, c[C_CUSTOM_MIN].xzy
+	mov R_TEMP1.z, c[C_CONST0].x
+	mov R_TEMP1.w, R_TEMP.w
+
+	mov oT0, R_TEMP1
+	mov oT3, R_TEMP1
+
+	; decompress texcoords
+	mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+
+	; transform bump texture coordinates
+	dp4 oT2.x, R_TEMP, c[C_CUSTOM_MIN+3]
+	dp4 oT2.y, R_TEMP, c[C_CUSTOM_MIN+4]
+	mov oT2.zw, c[C_CONST0].xz
+									
+	; fade and fog
+	dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+	mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+1].z, c[C_CUSTOM_MIN+1].w
+	max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+	min oD0.w, R_TEMP.w, c[C_CONST0].z
+	FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs_2_blended_normal_maps" target="vs_1_1">
+	// Constants
+	// 0	=>  constants = [0.0f, 0.5f, -0.5f, 0.0f]
+	// 1	=>	fade constants
+	// 2	=>  light direction pointing toward the light source
+	// 3-4	=>	tex matrix 1
+	// 5-6  =>  tex matrix 2
+	
+	#include "pcRedVertexShaderConstants.h"
+	#include "pcRedVertexShaderMacros.h"
+
+	#define R_VIEW_VEC		r7
+	#define R_HALF_VEC		r8
+	#define R_WORLD_NORMAL	r11
+
+	; transform normal to world space
+	dp3 R_WORLD_NORMAL.x, R_NORMAL, c[C_OBJ_WORLD_M0]
+	dp3 R_WORLD_NORMAL.y, R_NORMAL, c[C_OBJ_WORLD_M1]
+	dp3 R_WORLD_NORMAL.z, R_NORMAL, c[C_OBJ_WORLD_M2]
+
+	; calculate the direction from the vertex to the eye
+	add R_VIEW_VEC.xyz, c[C_WORLD_VIEWPOS].xyz, -R_WORLD_POS.xyz		
+	dp3 R_VIEW_VEC.w, R_VIEW_VEC.xyz, R_VIEW_VEC.xyz
+	rsq R_TEMP1.x, R_VIEW_VEC.w	
+	mul R_VIEW_VEC.xyz, R_VIEW_VEC.xyz, R_TEMP1.x
+
+	// put the biased view vector in the tex coord
+	mad oD0.xyz, R_VIEW_VEC.xzy, c[C_CONST0].yyy, c[C_CONST0].yyy
+
+	; calculate the half vector
+	add R_HALF_VEC.xyz, R_VIEW_VEC.xyz, c[C_CUSTOM_MIN+2].xyz
+	dp3 R_TEMP.w, R_HALF_VEC.xyz, R_HALF_VEC.xyz
+	rsq R_TEMP1.x, R_TEMP.w	
+	mul R_HALF_VEC.xyz, R_HALF_VEC.xyz, R_TEMP1.x
+	
+	; project the position
+	POS_PROJECT(R_TEMP)
+	mov oPos, R_TEMP
+	
+	; write projected reflection map texture coordinates
+	dp3 oT3.x, R_TEMP.xyw, c[C_CUSTOM_MIN].yxy
+	dp3 oT3.y, R_TEMP.xyw, c[C_CUSTOM_MIN].xzy
+	mov oT3.z, c[C_CONST0].x
+	mov oT3.w, R_TEMP.w
+
+	; decompress texcoords
+	mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+
+	; transform texture coordinates
+	dp4 oT0.x, R_TEMP, c[C_CUSTOM_MIN+3]
+	dp4 oT0.y, R_TEMP, c[C_CUSTOM_MIN+4]
+	mov oT0.zw, c[C_CONST0].xz
+
+	; transform 2nd texture coordinates
+	dp4 oT1.x, R_TEMP, c[C_CUSTOM_MIN+5]
+	dp4 oT1.y, R_TEMP, c[C_CUSTOM_MIN+6]
+	mov oT1.zw, c[C_CONST0].xz
+
+	// put the half vector in t3 which will be normalized by a cubemap and put 1 in w coordinate
+	mad oT2.xyzw, R_HALF_VEC.xzyw, c[C_CONST0].zzzx, c[C_CONST0].xxxz
+
+	; fade and fog
+	dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+	mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+1].z, c[C_CUSTOM_MIN+1].w
+	max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+	min oD0.w, R_TEMP.w, c[C_CONST0].z
+	FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+
+	<!-- ************************** PIXEL SHADERS **************************************** -->
+
+	<pixelshader name="ps_transmissive_pass_fade" target="ps_1_1">
+	texcoord t0
+
+	mul_sat r0.rgb, c0, t0
+	+mov_sat r0.a, t0.b
+	</pixelshader>
+
+	<pixelshader name="ps_projective_normal_map_distorted_reflection" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	def c7, 1, 1, 0, 1		// unswizzle constant
+
+	tex t0					// accumulated normal_bx2 map
+	tex t2					// signed bump map
+	texbem t3, t2			// reflection map
+	
+	// (1-2) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+					
+	// (3) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, t0_bx2, r1
+
+	// (4) compute fresnel term r1.a = (1 - N.V)^2
+	mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (6) modify fresnel term to min/max (from c2.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+					
+	// (7) calculate reflection + specular r0.rgb = c1.rgb * t1.rgb + (N.H)^16
+	mul r0.rgb, t3, c1.a
+	// multiply the alpha by the fade factor				
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps_projective_normal_map_distorted_reflection_specular" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	def c7, 1, 1, 0, 1		// unswizzle constant
+
+	tex t0					// accumulated normal_bx2 map
+	tex t1					// half vector in tangent space
+	tex t2					// signed bump map
+	texbem t3, t2			// reflection map
+
+	// (1) compute (N.H) in a channel
+	dp3_sat r1.rgba, t0_bx2, t1_bx2
+		
+	// (2-3) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	+mul r0.a, r1.a, r1.a
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+	+mul r0.a, r0.a, r0.a
+					
+	// (4) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, t0_bx2, r1
+
+	// (5) compute (N.H)^8
+	mul r0.rgb, r0.a, r0.a
+	// compute fresnel term r1.a = (1 - N.V)^2
+	+mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (6) modify fresnel term to min/max (from c2.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+					
+	// (7) calculate reflection + specular r0.rgb = c1.rgb * t1.rgb + (N.H)^16
+	mad r0.rgb, t3, c1.a, r0
+	// multiply the alpha by the fade factor				
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>
+	
+	<pixelshader name="ps_projective_normal_map_reflection" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	def c7, 1, 1, 0, 1		// unswizzle constant
+
+	tex t0					// accumulated normal_bx2 map
+	tex t3					// reflection texture
+
+
+	// (1-2) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+					
+	// (3) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, t0_bx2, r1
+
+	// (4) compute fresnel term r1.a = (1 - N.V)^2
+	mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (5) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+
+	// (6) multiply the alpha by the fade factor
+	mul r0.rgb, c1.a, t3
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps_projective_normal_map_reflection_specular" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	def c7, 1, 1, 0, 1		// unswizzle constant
+
+	tex t0					// accumulated normal_bx2 map
+	tex t1					// half vector in tangent space
+	tex t3					// reflection texture
+
+	// (1) compute (N.H) in a channel
+	dp3_sat r1.rgba, t0_bx2, t1_bx2
+		
+	// (2-3) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	+mul r0.a, r1.a, r1.a
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+	+mul r0.a, r0.a, r0.a
+					
+	// (4) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, t0_bx2, r1
+
+	// (5) compute (N.H)^8
+	mul r0.rgb, r0.a, r0.a
+	// compute fresnel term r1.a = (1 - N.V)^2
+	+mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (6) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+
+	// (7) multiply the alpha by the fade factor
+	mad r0.rgb, c1.a, t3, r0
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps_2_blended_normal_maps_reflection" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => map blend constant
+
+	tex t0			// normal map 1
+	tex t1			// normal map 2
+	tex t3			// projected reflection map
+
+	// (1) blend the two normals together
+	lrp r0.rgb, c3.a, t1_bx2, t0_bx2		
+
+	
+	// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+					
+	// (5) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, r0, r1
+
+	// compute fresnel term r1.a = (1 - N.V)^2
+	mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (7) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+					
+	// (8) calculate reflection + specular r0.rgb = c4.rgb * t1.rgb + (N.H)^8
+	mul r0.rgb, t3, c1.a
+	// multiply the alpha by the fade factor				
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>			
+
+	<pixelshader name="ps_2_blended_normal_maps_reflection_specular" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => map blend constant
+
+	tex t0			// normal map 1
+	tex t1			// normal map 2
+	tex t2			// normalized half vector (using a normalization cubemap)
+	tex t3			// projected reflection map
+
+	// (1) blend the two normals together
+	lrp r0.rgb, c3.a, t1_bx2, t0_bx2		
+
+	// (2) compute (N.H) in a channel
+	dp3_sat r1.rgba, r0, t2_bx2
+		
+	// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	+mul r0.a, r1.a, r1.a
+
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+	+mul r0.a, r0.a, r0.a
+					
+	// (5) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, r0, r1
+
+	// (6) compute (N.H)^8
+	mul r0.rgb, r0.a, r0.a
+	// compute fresnel term r1.a = (1 - N.V)^2
+	+mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (7) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+					
+	// (8) calculate reflection + specular r0.rgb = c4.rgb * t1.rgb + (N.H)^8
+	mad r0.rgb, t3, c1.a, r0
+	// multiply the alpha by the fade factor				
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>			
+
+	<pixelshader name="ps_2_blended_normal_maps" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => map blend constant
+
+	tex t0			// normal map 1
+	tex t1			// normal map 2
+
+	// (1) blend the two normals together
+	lrp r0.rgb, c3.a, t1_bx2, t0_bx2		
+	
+	// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+					
+	// (5) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, r0, r1
+
+	// compute fresnel term r1.a = (1 - N.V)^2
+	mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (7) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+
+	// (8) multiply the alpha by the fade factor
+	mov r0.rgb, c1
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>			
+
+	<pixelshader name="ps_2_blended_normal_maps_specular" target="ps_1_1">	
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => map blend constant
+
+	tex t0			// normal map 1
+	tex t1			// normal map 2
+	tex t2			// normalized half vector (using a normalization cubemap)
+
+	// (1) blend the two normals together
+	lrp r0.rgb, c3.a, t1_bx2, t0_bx2		
+
+	// (2) compute (N.H) in a channel
+	dp3_sat r1.rgba, r0, t2_bx2
+		
+	// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+	// compute (N.H)^4 in alpha channel
+	dp3_d2 r1.rgb, v0_bx2, v0_bx2
+	+mul r0.a, r1.a, r1.a
+
+	mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+	+mul r0.a, r0.a, r0.a
+					
+	// (5) compute (N.V) in alpha channel
+	dp3_sat r1.rgba, r0, r1
+
+	// (6) compute (N.H)^8
+	mul r0.rgb, r0.a, r0.a
+	// compute fresnel term r1.a = (1 - N.V)^2
+	+mul r1.a, 1-r1.a, 1-r1.a
+	
+	// (7) modify fresnel term to min/max (from c1.ba)
+	lrp r0.a, r1.a, c2.a, c2.b
+
+	// (8) multiply the alpha by the fade factor
+	add r0.rgb, c1, r0
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps_lowquality" target="ps_1_1">
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => diffuse tex blend constant
+	// c4 => specular mask blend constant
+
+//	tex t0			// diffuse map 1
+	tex t1			// diffuse map 2
+
+	// blend the diffuse maps together
+//	lrp r0, c3, t1, t0
+
+	// multiply the water color
+	mul r0, c0, t1
+	mul r0.rgb, r0, v0
+	+mul r0.a, r0.a, v0.a
+	</pixelshader>			
+
+	<pixelshader name="ps_lowquality_specular" target="ps_1_1">
+	// c0 => refraction color
+	// c1 => reflection color
+	// c2 => fresnel min/max
+	// c3 => diffuse tex blend constant
+	// c4 => specular mask blend constant
+
+//	tex t0			// diffuse map 1
+	tex t1			// diffuse map 2
+	tex t2			// specular map 1
+	tex t3			// specular map 2
+
+	// blend the diffuse maps together
+//	lrp r0, c3, t1, t0
+
+	// multiply the water color
+	mul r0, c0, t1
+
+	// blend the specular mask
+	lrp r1.rgb, c4, t3, t2
+
+	// add specular component
+	mad r0.rgb, r1, v1, r0
+	+mul r0.a, r0.a, v0.a
+	mul r0.rgb, r0, v0
+	</pixelshader>		
+
+	<!-- ***************************** STATES ************************************ -->
+
+	<pipeline id="1">
+	
+		<!-- STATE 0: Projective Bumpmap with distorted reflection with specular-->
+		<state id="0">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+		
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_projective_normal_map"/>
+				<pixelshader use="ps_projective_normal_map_distorted_reflection_specular"/>			
+			</pass>
+		</state>
+
+		<!-- STATE 1: Projective Bumpmap with distorted reflection -->
+		<state id="1">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+		
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_projective_normal_map"/>
+				<pixelshader use="ps_projective_normal_map_distorted_reflection"/>			
+			</pass>
+		</state>
+
+		<!-- STATE 2: Projective Bumpmap without reflection with specular -->
+		<state id="2">	
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_projective_normal_map"/>
+				<pixelshader use="ps_projective_normal_map_reflection_specular"/>			
+			</pass>
+		</state>
+		
+		<!-- STATE 3: Projective Bumpmap without reflection -->
+		<state id="3">	
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_projective_normal_map"/>
+				<pixelshader use="ps_projective_normal_map_reflection"/>			
+			</pass>
+		</state>	
+		
+		<!-- STATE 4: 2 blended bumpmaps with reflection with specular -->		
+		<state id="4">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_2_blended_normal_maps"/>
+				<pixelshader use="ps_2_blended_normal_maps_reflection_specular"/>
+			</pass>
+		</state>	
+		
+		<!-- STATE 5: 2 blended bumpmaps with reflection -->		
+		<state id="5">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_2_blended_normal_maps"/>
+				<pixelshader use="ps_2_blended_normal_maps_reflection"/>
+			</pass>
+		</state>			
+
+		<!-- STATE 6: 2 blended bumpmaps without reflection with specular -->		
+		<state id="6">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_2_blended_normal_maps"/>
+				<pixelshader use="ps_2_blended_normal_maps_specular"/>
+			</pass>
+		</state>		
+
+		<!-- STATE 7: 2 blended bumpmaps without reflection -->		
+		<state id="7">
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_2_blended_normal_maps"/>
+				<pixelshader use="ps_2_blended_normal_maps"/>
+			</pass>
+		</state>
+		
+		<!-- STATE 8: low quality simple water shader (emulates fixed function water) with specular -->		
+		<state id="8">
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_lowquality"/>
+				<pixelshader use="ps_lowquality_specular"/>			
+			</pass>
+		</state>
+		
+		<!-- STATE 9: low quality simple water shader (emulates fixed function water) -->		
+		<state id="9">
+			<pass transform="normals" lighting="none">
+				<vertexshader use="vs_lowquality"/>
+				<pixelshader use="ps_lowquality"/>			
+			</pass>
+		</state>		
+	</pipeline>
+
+<!--
+	<pipeline id="2">
+
+		******************** State 0: Dynamic Bumpmap with reflection ****************************
+		<state id="0">
+		
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade_out"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+		
+			<pass transform="normals" lighting="none">
+				<vertexshader target="vs_1_1">
+				// Constants
+				// 0-2	=>	Object to World Matrix
+				// 3	=>	light direction pointing toward the light source
+				// 4	=>	eye position
+				// 5-6	=>	bump matrix
+				// 7	=>	constant[0.0 0.5 -0.5 0.0]
+				
+				#include "pcRedVertexShaderConstants.h"
+				#include "pcRedVertexShaderMacros.h"
+
+				#define R_VIEW_VEC		r7
+				#define R_HALF_VEC		r8
+				#define R_WORLD_NORMAL	r11
+					
+				; transform normal to world space
+				dp3 R_WORLD_NORMAL.x, R_NORMAL, c[C_OBJ_WORLD_M0]
+				dp3 R_WORLD_NORMAL.y, R_NORMAL, c[C_OBJ_WORLD_M1]
+				dp3 R_WORLD_NORMAL.z, R_NORMAL, c[C_OBJ_WORLD_M2]
+
+				; calculate the direction from the vertex to the eye
+				add R_VIEW_VEC.xyz, c[C_WORLD_VIEWPOS].xyz, -R_WORLD_POS.xyz		
+				dp3 R_VIEW_VEC.w, R_VIEW_VEC.xyz, R_VIEW_VEC.xyz
+				rsq R_TEMP1.x, R_VIEW_VEC.w	
+				mul R_VIEW_VEC.xyz, R_VIEW_VEC.xyz, R_TEMP1.x
+			
+				; calculate the half vector
+				add R_HALF_VEC.xyz, R_VIEW_VEC.xyz, c[C_CUSTOM_MIN].xyz
+				dp3 R_TEMP.w, R_HALF_VEC.xyz, R_HALF_VEC.xyz
+				rsq R_TEMP1.x, R_TEMP.w	
+				mul R_HALF_VEC.xyz, R_HALF_VEC.xyz, R_TEMP1.x
+
+				mov oT2.xyz, R_HALF_VEC.xzy
+				mov oT3.xyz, R_VIEW_VEC.xzy
+
+				; project the position
+				POS_PROJECT(R_TEMP)
+
+				mov oPos, R_TEMP
+				
+				; write projected texture coordinates
+				dp3 R_TEMP1.x, R_TEMP.xyw, c[C_CUSTOM_MIN+3].yxy
+				dp3 R_TEMP1.y, R_TEMP.xyw, c[C_CUSTOM_MIN+3].xzy
+				mov R_TEMP1.z, c[C_CONST0].x
+				mov R_TEMP1.w, R_TEMP.w
+
+				mov oT0, R_TEMP1
+				mov oT1, R_TEMP1
+				
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				; clamp to [0.0,1.0] and square it to fade transparent objects faster
+				max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+				min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+				mul oD0.w, R_TEMP.w, R_TEMP.w
+				</vertexshader>
+				
+				<pixelshader target="ps_2_0">
+				// Bump map Water shader with reflection and fresnel term
+				// Inputs:
+				//  t0.rgb		normal map_bx2.rgb
+				//	t1.rgb		reflection map
+				//  v0.rgb		view vector _bx2 in texture space
+				//  v1.rgb		half vector _bx2 in texture space
+				//	c0.rgba		water transmissive color and opacity
+							
+				def c1, 0, 0, 0.2, 0.9
+				def c2, 1, 1, 0, 1
+				def c3, 0, 0, 1, 0
+				def c4, 0.75, 0.75, 0.75, 0.75	// reflectivity
+				def c5, 1.0, 1.0, 1.0, 1.0		// bias
+				def c6, 2.0, 2.0, 2.0, 2.0		// bias
+				def c7, 0.03, 0.03, 0.03, 0.03	// bump scale
+				def c8, 1.0, 2.0, 0.0, 0.0		// specular power and fresnel power
+					
+				def c9, 0.0, 1.0, 0.0, 0.0
+
+				dcl v0.w			// fade factor
+				dcl t0				// tex coords for normal map
+				dcl t1				// tex coords for reflection map
+				dcl	t2.xyz			// half vector
+				dcl t3.xyz			// view vector
+				dcl_2d s0
+				dcl_2d s1
+
+				// load the bump map			
+				texldp r0, t0, s0
+				
+				// bias the color to make it a vector
+				mul r0, r0, c6
+				add r0, r0, -c5
+
+				// perform the perspective divide on the reflection map
+				rcp r1, t1.w
+				mul r1, t1, r1.w
+
+				// perturb the reflection texture coordinates and lookup the reflection map
+				mad r1, c7, r0, r1
+				texld r1, r1, s1
+
+				// normalize the half vector and the view vector
+				nrm r2, t2
+				nrm r3, t3	
+			
+				// compute (N.H)^specpower
+				dp3_sat r4, r0, r2
+				pow r4, r4.r, c8.r
+
+
+				// compute (1-N.V)^fresnelpower
+				dp3_sat r5, r0, r3
+				add r5, c5, -r5
+				pow r5, r5.r, c8.g
+				
+				// modify fresnel term to min/max (from c1.ba)
+				lrp r0.a, r5.r, c1.a, c1.b
+
+				// calculate reflection + specular r0.rgb = c4.rgb * r1.rgb + (N.H)^specpower
+//				mad r0.rgb, r1, c4, r4.r
+				mul r0.rgb, r1, c4
+				// multiply the alpha by the fade factor				
+//				mul r0.a, r0.a, v0.a	
+
+				mov oC0, r0
+
+/*
+					
+				tex t0					// accumlated bump_bx2 map
+				texbem t1, t0
+				tex t2
+				tex t3
+																									
+				// (1) unswizzle move normal.z from alpha channel to blue channel
+				mov r0, t2
+
+
+				// (2) compute (N.H) in a channel
+				dp3_sat r1.rgba, r0_bx2, t3_bx2
+					
+				// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+				// compute (N.H)^4 in alpha channel
+				dp3_d2 r1.rgb, v0_bx2, v0_bx2
+				+mul r0.a, r1.a, r1.a
+				mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+				+mul r0.a, r0.a, r0.a
+								
+				// (5) compute (N.V) in alpha channel
+				dp3_sat r1.rgba, r0_bx2, r1
+			
+				// (6) compute (N.H)^8
+				mul r0.rgb, r0.a, r0.a
+				// compute fresnel term r1.a = (1 - N.V)^2
+				+mul r1.a, 1-r1.a, 1-r1.a
+				
+				// (7) compute (N.H)^16
+				mul r0.rgb, r0, r0
+				// modify fresnel term to min/max (from c1.ba)
+				+lrp r0.a, r1.a, c1.a, c1.b
+								
+				// (8) calculate reflection + specular r0.rgb = c4.rgb * t1.rgb + (N.H)^16
+				mad r0.rgb, t1, c4, r0
+				// multiply the alpha by the fade factor				
+				+mul r0.a, r0.a, v0.a	
+*/
+				</pixelshader>			
+			</pass>
+
+		</state>
+		
+		**************** State 1: 2 Averaged Bumpmaps for water in the far scene ************
+		<state id="1">
+
+			<pass transform="position" lighting="none">
+				<vertexshader use="vs_transmissive_pass_fade_in"/>
+				<pixelshader use="ps_transmissive_pass_fade"/>
+			</pass>
+
+			<pass transform="normals" lighting="none">
+				<vertexshader target="vs_1_1">
+				// Constants
+				// 0-2	=>	Object to World Matrix
+				// 3	=>	light direction pointing toward the light source (w = specular power)
+				// 4	=>	eye position
+				// 5-6	=>	tex matrix 1
+				// 7-8  =>  tex matrix 2
+				
+				#include "pcRedVertexShaderConstants.h"
+				#include "pcRedVertexShaderMacros.h"
+
+				#define R_VIEW_VEC		r7
+				#define R_HALF_VEC		r8
+				#define R_WORLD_POS		r10
+				#define R_WORLD_NORMAL	r11
+		
+				; calculate world position
+				dp4 R_WORLD_POS.x, R_POS, c[C_CUSTOM_MIN+0]
+				dp4 R_WORLD_POS.y, R_POS, c[C_CUSTOM_MIN+1] 
+				dp4 R_WORLD_POS.z, R_POS, c[C_CUSTOM_MIN+2]					
+
+				; calculate world normal
+				dp3 R_WORLD_NORMAL.x, c[C_CUSTOM_MIN+0], R_NORMAL
+				dp3 R_WORLD_NORMAL.y, c[C_CUSTOM_MIN+1], R_NORMAL
+				dp3 R_WORLD_NORMAL.z, c[C_CUSTOM_MIN+2], R_NORMAL
+
+				; calculate the direction from the vertex to the eye
+				add R_VIEW_VEC.xyz, c[C_CUSTOM_MIN+4].xyz, -R_WORLD_POS.xyz		
+				dp3 R_VIEW_VEC.w, R_VIEW_VEC.xyz, R_VIEW_VEC.xyz
+				rsq R_TEMP1.x, R_VIEW_VEC.w	
+				mul R_VIEW_VEC.xyz, R_VIEW_VEC.xyz, R_TEMP1.x
+			
+				// put the biased view vector in the tex coord
+				mad oD0.xyz, R_VIEW_VEC.xzy, c[C_CONST0].yyy, c[C_CONST0].yyy
+
+				; calculate the half vector
+				add R_HALF_VEC.xyz, R_VIEW_VEC.xyz, c[C_CUSTOM_MIN].xyz
+				dp3 R_TEMP.w, R_HALF_VEC.xyz, R_HALF_VEC.xyz
+				rsq R_TEMP1.x, R_TEMP.w	
+				mul R_HALF_VEC.xyz, R_HALF_VEC.xyz, R_TEMP1.x
+				
+				; calculate the specular value
+				dp3 R_TEMP.x, R_WORLD_NORMAL, c[C_CUSTOM_MIN]		// N.L
+				dp3 R_TEMP.y, R_HALF_VEC, R_WORLD_NORMAL			// N.H
+				mov R_TEMP.w, c[C_CUSTOM_MIN].w					// specular power
+				lit R_TEMP, R_TEMP									// R_TEMP.z has output specular value
+				mov oD1.xyz, R_TEMP.zzz			
+
+				; project the position
+				POS_OBJECT_PROJECT(R_TEMP)
+				mov oPos, R_TEMP
+				
+				; write projected reflection map texture coordinates
+				dp3 oT2.x, R_TEMP.xyw, c[C_CUSTOM_MIN+1].yxy
+				dp3 oT2.y, R_TEMP.xyw, c[C_CUSTOM_MIN+1].xzy
+				mov oT2.z, c[C_CONST0].x
+				mov oT2.w, R_TEMP.w
+
+				; decompress texcoords
+				mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+
+				; transform texture coordinates
+				dp4 oT0.x, R_TEMP, c[C_CUSTOM_MIN+2]
+				dp4 oT0.y, R_TEMP, c[C_CUSTOM_MIN+3]
+				mov oT0.zw, c[C_CONST0].xz
+
+				; transform 2nd texture coordinates
+				dp4 oT1.x, R_TEMP, c[C_CUSTOM_MIN+4]
+				dp4 oT1.y, R_TEMP, c[C_CUSTOM_MIN+5]
+				mov oT1.zw, c[C_CONST0].xz
+
+				// put the half vector in t3 which will be normalized by a cubemap and put 1 in w coordinate
+				mad oT3.xyzw, R_HALF_VEC.xzyw, c[C_CONST0].zzzx, c[C_CONST0].xxxz
+
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				; clamp to [0.0,1.0]
+				max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+				min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+				add oD0.w, c[C_CONST0].z, -R_TEMP.w
+				</vertexshader>
+				
+				<pixelshader target="ps_1_1">
+				// Bump map Water shader with reflection and fresnel term
+				// Inputs:
+				//  t0.rgb		normal map_bx2.rgb
+				//	t1.rgb		reflection map
+				//  v0.rgb		view vector _bx2 in texture space
+				//  v1.rgb		half vector _bx2 in texture space
+				//	c0.rgba		water transmissive color and opacity
+							
+				def c1, 0, 0, 0.2, 0.9
+				def c2, 1, 1, 0, 1
+				def c3, 0, 0, 1, 0
+				def c4, 0.75, 0.75, 0.75, 0.75	// reflectivity
+				
+				tex t0			// normal map 1
+				tex t1			// normal map 2
+				tex t2			// projected reflection map
+				tex t3			// normalized half vector (using a normalization cubemap)
+
+				// (1) blend the two normals together
+				lrp r0.rgb, c7.a, t1_bx2, t0_bx2		
+
+				// (2) compute (N.H) in a channel
+				dp3_sat r1.rgba, r0, t3_bx2
+					
+				// (3-4) renormalize view vector using n' = [(3 - n.n) / 2 ] * n
+				// compute (N.H)^4 in alpha channel
+				dp3_d2 r1.rgb, v0_bx2, v0_bx2
+				+mul r0.a, r1.a, r1.a
+				mad r1.rgb, -v0_bx2, r1_bias, v0_bx2
+				+mul r0.a, r0.a, r0.a
+								
+				// (5) compute (N.V) in alpha channel
+				dp3_sat r1.rgba, r0_bx2, r1			
+			
+				// (6) compute (N.H)^8
+				mul r0.rgb, r0.a, r0.a
+				// compute fresnel term r1.a = (1 - N.V)^2
+				+mul r1.a, 1-r1.a, 1-r1.a
+				
+				// (7) compute (N.H)^16
+				mul r0.rgb, r0, r0
+				// modify fresnel term to min/max (from c1.ba)
+				+lrp r0.a, r1.a, c1.a, c1.b	
+								
+				// (8) calculate reflection + specular r0.rgb = c4.rgb * t2.rgb + (N.H)^16
+				mad r0.rgb, t2, c4, r0
+				// multiply the alpha by the fade factor				
+				+mul r0.a, r0.a, v0.a	
+				</pixelshader>			
+			</pass>
+		</state>		
+	</pipeline>
+-->
+</shader>

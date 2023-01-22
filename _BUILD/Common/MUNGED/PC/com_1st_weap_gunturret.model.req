@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_1st_bldg_minigun_base"
+		"com_bldg_minigun_turret"
+	}
+}

@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"rechargedroid_icon"
+	}
+	REQN
+	{
+		"model"
+		"com_item_healthrecharge"
+		"com_item_healthrecharge_dst"
+	}
+	REQN
+	{
+		"class"
+		"com_inf_rechargedroid_exp"
+	}
+}

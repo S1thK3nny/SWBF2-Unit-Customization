@@ -1,0 +1,125 @@
+
+
+SOFTWARE LICENSE AND LIMITED WARRANTY
+
+
+PLEASE READ THIS LICENSE CAREFULLY BEFORE INSTALLING OR OTHERWISE USING THE SOFTWARE.  BY INSTALLING OR OTHERWISE USING THE SOFTWARE, YOU ARE AGREEING TO BE BOUND BY THE TERMS OF THIS LICENSE.  BY CLICKING THE "I ACCEPT THE ABOVE TERMS" BUTTON, YOU ACCEPT THE TERMS AND CONDITIONS BELOW.  BY CLICKING THE "I DECLINE THE ABOVE TERMS" BUTTON, YOU DO NOT ACCEPT THE TERMS OF THIS LICENSE, IN WHICH CASE YOU MUST NOT INSTALL OR USE THE SOFTWARE AND ALSO DELETE THE SOFTWARE AND ALL RELATED FILES FROM YOUR COMPUTER.
+
+
+The computer program, printed materials or on-line or electronic documentation, if any, and other components and all copies of such materials as such as may be modified or updated that are being released including, without limitation, the level editor for the computer software game (the "Game") entitled Star Wars Battlefront  (collectively referred to as the "Software"), are the copyrighted property of LucasArts, a division of Lucasfilm Entertainment Company Ltd. and/or its affiliated entities or divisions, and its licensors (collectively referred to as "LucasArts").  The Software is non-exclusively licensed (not sold) to you, and LucasArts owns and/or controls all copyright, trade secret, patent and other proprietary rights in the Software.  LucasArts may make improvements or updates to the Software at any time and with or without notice to you, which may be made available to you as LucasArts may determine.  
+
+
+YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT LUCASARTS DOES NOT AND WILL NOT PROVIDE SUPPORT FOR THE SOFTWARE AND THAT YOU SHOULD NOT CONTACT LUCASARTS' CUSTOMER SUPPORT REGARDING THE SOFTWARE.  SHOULD YOU ATTEMPT TO CONTACT LUCASARTS FOR SUCH SUPPORT, LUCASARTS IS UNDER NO OBLIGATION TO RESPOND TO YOU.
+
+
+All rights not specifically granted under this Agreement are reserved by LucasArts and, as applicable, their licensors.  You may not:  (1) except as may be required in connection with the installation of the Software, copy the Software; (2) distribute, rent, lease, sublicense or otherwise commercially exploit all or any portion of the Software; (3) modify or prepare derivative works of the Software, except as otherwise may be specifically allowed herein; (4) reverse engineer the Software, derive source code, or otherwise attempt to reconstruct or discover any underlying source code, ideas, algorithms, file formats, programming or interoperability interfaces of the Software by any means whatsoever, except to the extent expressly permitted by law despite a contractual provision to the contrary, and then only after you have notified LucasArts in writing of your intended activities; (5) remove, disable, or circumvent any proprietary notices or labels that may be contained on or within the Software; (6) export or re-export the Software or any copy or adaptation thereof in violation of any applicable laws or regulations; or (7) commercially exploit the Software.  
+
+
+Rules Governing New Levels:  LucasArts is under no obligation to make any features in the Game that will allow you to create New Levels.  If  LucasArts determines, in its sole discretion, to make such features available, then the following will apply: "New Levels" are data that modify, add to, or substitute for data in the Game, thus modifying, adding to, or replacing levels provided by LucasArts in the Game, and may also include saved games, and scenarios created using the skirmish features of the Game.  New Levels may be permitted by LucasArts, in its sole discretion, subject to the terms and conditions of this Agreement and the following additional conditions:
+
+
+(1)     New Levels may work only if used in combination with the retail version of the Game, and may not work with any demo or Original Equipment Manufacturer (generally known as "OEM") versions of the Game.  New Levels may not be designed to be used as a stand-alone product.
+
+(2)     New Levels may not modify any COM, EXE, DLL or other executable files.  
+
+(3)     New Levels must not contain any illegal, scandalous, illicit, defamatory, libelous, or objectionable material (as may be determined by LucasArts in its sole discretion), or any material that infringes any trademarks, copyrights, protected works, publicity, proprietary, or other rights of any third party or of LucasArts.  
+
+(4)     New Levels may not include any LucasArts sound effects or music files or portions thereof.  
+
+(5)     New Levels must identify in every description file, on-line description, read-me, and in comments in the New Level code (if new code is added): (a) the name, address, and e-mail address of the level's creators, and (b) the following disclaimer: "THIS LEVEL IS NOT MADE, DISTRIBUTED, OR SUPPORTED BY LUCASARTS, A DIVISION OF LUCASFILM ENTERTAINMENT COMPANY LTD.  ELEMENTS TM & (C) LUCASARTS, A DIVISION OF LUCASFILM ENTERTAINMENT COMPANY LTD."  
+
+(6)     New Levels may not be sold, bartered, or distributed with any other product for which any charge is made (other than incidental charges for time spent on-line), but rather must be distributed free of charge at all times. 
+
+(7)     By distributing or permitting the distribution of any New Levels, all creators or owners of any trademark, copyright, or other right, title or interest therein: (a) grant to LucasArts an irrevocable, perpetual, royalty-free, sublicensable right to distribute or exploit the New Level by any means or media (whether now known or hereafter invented), and to create and distribute by any means or media (whether now known or hereafter invented) derivative works thereof, and to charge for the distribution of such New Level or such derivative work, with no obligation to account to any creators or owners of the New Level in any manner, and (b) waive and covenant not to assert in any forum any and all moral rights (including, without limitation, rights of paternity, attribution, integrity, and participation), and authorize LucasArts to publish and exploit the New Levels (including any portions and derivatives thereof) in its sole discretion without attributing any of the foregoing to me or identifying me in connection therewith.
+
+(8)     LucasArts may revoke your right or permission to use, distribute or make New Levels at any time and in its sole discretion.
+
+
+You may transfer the Software, but only if the recipient agrees to accept and be bound by the terms and conditions of this Agreement.  If you transfer the Software, you must transfer all components and documentation and erase any copies residing on computer equipment.  Your rights in and to this license are automatically terminated if and when you transfer the Software.  
+
+
+You further expressly acknowledge and agree that use of the Software is at your sole risk.  The Software and any related documentation or materials are provided "AS IS" and without warranty of any kind.  LUCASARTS EXPRESSLY DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  LUCASARTS DOES NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THE SOFTWARE WILL MEET YOUR REQUIREMENTS, THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, OR THAT DEFECTS IN THE SOFTWARE WILL BE CORRECTED.  THE ENTIRE RISK AS TO THE RESULTS AND PERFORMANCE OF THE SOFTWARE IS ASSUMED BY YOU, AND YOU (AND NOT LUCASARTS) ASSUME THE ENTIRE COST OF ALL SERVICING, REPAIR AND/OR CORRECTION.  SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSION MAY NOT APPLY TO YOU.
+
+
+UNDER NO CIRCUMSTANCES INCLUDING NEGLIGENCE, SHALL LUCASARTS, OR ITS DIRECTORS, OFFICERS, EMPLOYEES, LICENSORS, LICENSEES OR AGENTS, BE LIABLE TO YOU FOR ANY INCIDENTAL, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES (INCLUDING DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOST DATA, LOSS OF BUSINESS INFORMATION, AND THE LIKE) ARISING OUT OF THE POSSESSION, USE, OR MALFUNCTION OF THE SOFTWARE, INCLUDING WITHOUT LIMITATION, DAMAGE TO PROPERTY AND, TO THE EXTENT PERMITTED BY LAW, DAMAGES FOR PERSONAL INJURY, EVEN IF LUCASARTS OR A LUCASARTS AUTHORIZED REPRESENTATIVE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR LOSS.  SOME JURISDICTIONS DO NOT ALLOW THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATION OR EXCLUSION MAY NOT APPLY TO YOU.  YOU AGREE THAT THE LIABILITY OF LUCASARTS ARISING OUT OF ANY KIND OF LEGAL CLAIM (WHETHER IN CONTRACT, TORT, OR OTHERWISE) WILL NOT EXCEED THE AMOUNT YOU ORIGINALLY PAID FOR THE USE OF THE SOFTWARE.  YOU AGREE TO WAIVE ANY RIGHT TO EQUITABLE RELIEF, INCLUDING, WITHOUT LIMITATION, ANY INJUNCTIVE RELIEF, TO ENFORCE THE TERMS HEREOF.  THE PARTIES ACKNOWLEDGE THAT THE LIMITATIONS OF LIABILITY IN THIS AND OTHER PROVISIONS OF THIS AGREEMENT AND THE ALLOCATION OF RISK HEREIN ARE AN ESSENTIAL ELEMENT OF THE BARGAIN BETWEEN THE PARTIES, WITHOUT WHICH LUCASARTS WOULD NOT HAVE ENTERED INTO THIS AGREEMENT.  LUCASARTS' PRICING REFLECTS THIS ALLOCATION OF RISK AND THE LIMITATION OF LIABILITY SPECIFIED HEREIN.
+
+
+THIS WARRANTY GIVES YOU SPECIFIC LEGAL RIGHTS, AND YOU MAY HAVE OTHER RIGHTS DEPENDING ON THE LAWS IN YOUR STATE.  
+
+
+This Agreement is governed in all respects by the laws of the State of California as such laws are applied to agreements entered into and to be performed entirely within California between California residents, and you hereby consent to personal jurisdiction in California.  This Agreement will not be governed by the United Nations Convention on Contracts for the International Sale of Goods, the application of which is expressly excluded. You and LucasArts each agree that any claim or controversy arising out of this Agreement or the Software shall be settled by expedited binding arbitration in accordance with the rules of the American Arbitration Association.  Such arbitration shall take place in Marin County, California, and you waive any claim that such forum is inconvenient.  Any such claim or controversy shall be arbitrated solely on an individual basis and shall not be consolidated with a claim of any other party.  The arbitrator may not change the terms of this Agreement.  The arbitrator may award injunctive or other equitable relief to enforce the terms hereof; provided, however, that no injunctive or equitable relief may be awarded that would enjoin or impair LucasArts' rights or ability to distribute or otherwise market, advertise, promote or exploit the Software.  If it is judicially determined that any claim or controversy arising out of or related to this Agreement or the Software cannot be settled by expedited binding arbitration as noted above, then you agree that any such claims or controversies shall be brought and maintained in the state courts located within the County of Marin, State of California or the federal courts of the Northern District of California, and you waive any claim that either such forum is inconvenient.  The foregoing shall not preclude LucasArts from seeking any injunctive or other relief for protection of LucasArts' intellectual property rights or similar rights in any court of competent jurisdiction.  This Agreement sets forth the entire understanding and agreement between you and LucasArts with respect to the subject matter hereof.  Except as provided herein, this Agreement may not be amended except in a writing signed by both parties; provided, however, that LucasArts has the right, without notice and/or without a writing signed by both parties, to amend this Agreement in connection with any modifications or updates to the Software.
+
+
+LucasArts and the LucasArts logo are registered trademarks of Lucasfilm Ltd.  Star Wars Battlefront is a trademark of Lucasfilm Entertainment Company Ltd. Copyright 2004 Lucasfilm Entertainment Company Ltd. or Lucasfilm Ltd. & (R) or TM as indicated.  All rights reserved.
+
+
+This Software License and Limited Warranty does not modify or amend the Software License and Limited Warranty for the Game.
+
+
+LucasArts, a division of
+Lucasfilm Entertainment Company Ltd.
+P.O. Box 10307
+San Rafael, CA 94912
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

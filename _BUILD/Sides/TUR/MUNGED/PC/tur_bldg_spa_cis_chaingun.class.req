@@ -1,0 +1,31 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"turret_icon"
+		"hud_all_lascannon_icon"
+		"hud_kam_turret_icon"
+	}
+	REQN
+	{
+		"model"
+		"cis_bldg_boxturret"
+		"cis_bldg_boxturret_chunk1"
+		"cis_bldg_boxturret_chunk2"
+	}
+	REQN
+	{
+		"class"
+		"cis_bldg_boxturret_exp"
+		"tur_weap_spa_chaingun"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_explosion_lg"
+		"com_sfx_chunktrail_sm"
+	}
+}

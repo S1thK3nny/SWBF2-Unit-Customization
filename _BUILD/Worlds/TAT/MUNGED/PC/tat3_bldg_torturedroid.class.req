@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"animbank"
+		"tat3_bldg_torturedroid"
+	}
+	REQN
+	{
+		"anim"
+		"idle"
+	}
+	REQN
+	{
+		"model"
+		"tat3_bldg_torturedroid"
+	}
+}

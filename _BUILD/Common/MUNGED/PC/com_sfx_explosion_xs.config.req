@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"explode3"
+		"com_sfx_smoke3"
+		"thicksmoke3"
+		"com_sfx_explosion1"
+		"com_sfx_flames1"
+		"com_sfx_laser_orange"
+	}
+}

@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"cor1_prop_holocron"
+		"com_prop_holocron_carried"
+	}
+	REQN
+	{
+		"class"
+		"flaglight"
+	}
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="particle" skinned="no" debuginfo="no">
+	<pipeline id="1">
+		<state id="0">
+			<pass transform="position" lighting="none">
+				<vertexshader target="vs_1_1">
+				#include "pcRedVertexShaderMacros.h"
+
+				; project the position into screen space		
+				POS_PROJECT(R_TEMP)
+				mov oPos, R_TEMP
+				
+				// r12.w is camera space z since position is already projected
+				mad R_TEMP1.w, R_TEMP.www, c[C_CUSTOM_MIN+0].xxx, c[C_CUSTOM_MIN+0].yyy
+				max R_TEMP1.w, R_TEMP1.w, c[C_CONST0].x
+				min R_TEMP1.w, R_TEMP1.w, c[C_CONST0].z				; clamp to (0..1)
+
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				; output fog value
+				FOG(R_TEMP.z, R_WORLD_POS, R_TEMP2)
+
+				; clamp to [0.0,1.0] and square it to fade transparent objects faster
+				max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+				min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+				mul R_TEMP.w, R_TEMP.w, R_TEMP.w
+				; output color with lighting and near scene fade
+				mul oD0.xyz, R_MATERIAL_COLOR.xyz, c[C_HDR].zzz
+				
+				; multiply fade factor
+				mul R_TEMP.w, R_TEMP.w, R_TEMP1.w
+
+				; output color				
+				mul oD0.w, R_MATERIAL_COLOR.w, R_TEMP.w
+
+				; decompress and scale texcoords
+				mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+				mad oT0, R_TEMP, c[C_CUSTOM_MIN+1].xy, c[C_CUSTOM_MIN+1].zw
+				</vertexshader>
+				
+				<pixelshader target="ps_1_1">
+				tex t0	       			// diffuse map
+
+				// r0.rgb = main * lighting
+				mul r0, t0, v0
+				</pixelshader>			
+			</pass>
+		</state>
+
+		<!-- STATE 1: blur particles -->
+		<state id="1">
+			<pass transform="normals" lighting="none">
+				<vertexshader target="vs_1_1">
+				#include "pcRedVertexShaderMacros.h"
+
+				; project the position into screen space	
+				POS_PROJECT(R_TEMP)
+				mov oPos, R_TEMP
+			
+				// r12.w is camera space z since position is already projected
+				mad R_TEMP1.w, R_TEMP.www, c[C_CUSTOM_MIN+0].xxx, c[C_CUSTOM_MIN+0].yyy
+				max R_TEMP1.w, R_TEMP1.w, c[C_CONST0].x
+				min R_TEMP1.w, R_TEMP1.w, c[C_CONST0].z				; clamp to (0..1)
+
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				; output fog value
+				FOG(R_TEMP.z, R_WORLD_POS, R_TEMP2)
+				; clamp to [0.0,1.0] and square it to fade transparent objects faster
+				max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+				min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+				; output color with lighting and near scene fade
+				mov oD0.xyz, R_MATERIAL_COLOR.xyz
+				
+				; multiply fade factor
+				mul R_TEMP.w, R_TEMP.w, R_TEMP1.w
+
+				; output color				
+				mul oD0.w, R_MATERIAL_COLOR.w, R_TEMP.w
+
+				; decompress and scale texcoords
+				mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+				mad oT0, R_TEMP, c[C_CUSTOM_MIN+1].xy, c[C_CUSTOM_MIN+1].zw
+
+				; the 3D texture coordinate that will be projected is stored in the normal
+				mad R_TEMP, R_NORMAL.xyzz, c[C_CONST0].zzzx, c[C_CONST0].xxxz
+				dp4 oT1.x, R_TEMP, c[C_CUSTOM_MIN+2]
+				dp4 oT1.y, R_TEMP, c[C_CUSTOM_MIN+3]
+				dp4 oT1.z, R_TEMP, c[C_CUSTOM_MIN+4]
+				dp4 oT1.w, R_TEMP, c[C_CUSTOM_MIN+5]
+				</vertexshader>
+				
+				<pixelshader target="ps_1_1">
+				def c0, 1.0,0.0,0.0,1.0
+				tex t0	       			// alpha map
+				tex t1					// refraction buffer
+
+				mul r0.rgb, t1, v0
+				+mul r0.a, v0.a, t0.a
+				</pixelshader>			
+			</pass>
+		</state>
+
+	</pipeline>
+</shader>

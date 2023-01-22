@@ -1,0 +1,31 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_dest_icon"
+	}
+	REQN
+	{
+		"model"
+		"tat2_bldg_tank_controlzone"
+		"tat2_bldg_tank_controlzone_dest"
+		"alliance"
+		"empire"
+		"republic"
+		"cis"
+	}
+	REQN
+	{
+		"class"
+		"com_holo_controlzone"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_vehiclesmoke"
+		"com_sfx_vehicleflame"
+	}
+}

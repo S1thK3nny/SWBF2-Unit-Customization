@@ -1,0 +1,16 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"troop_icon"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_watersplash_sm"
+		"com_sfx_watersplash_md"
+		"com_sfx_watersplash_wade"
+	}
+}

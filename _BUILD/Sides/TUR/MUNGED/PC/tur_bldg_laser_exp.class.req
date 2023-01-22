@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"config"
+		"com_sfx_explosion_lg"
+		"com_sfx_chunktrail_xs"
+	}
+	REQN
+	{
+		"model"
+		"com_smallchunk1"
+	}
+}

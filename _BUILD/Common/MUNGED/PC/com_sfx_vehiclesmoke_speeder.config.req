@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_smoketrail"
+		"com_sfx_smoke4"
+	}
+}

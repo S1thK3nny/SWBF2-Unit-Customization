@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"class"
+		"com_weap_veh_mortar_ord"
+		"tur_weap_recoilless_kas_exp"
+	}
+}

@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_cell"
+		"tat3_bldg_cell_02"
+		"tat3_bldg_cell_05"
+		"tat3_bldg_cell_04"
+		"tat3_bldg_cell_01"
+		"tat3_bldg_cell_03"
+	}
+}

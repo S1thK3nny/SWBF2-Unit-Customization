@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"common_bldg_controlzone_large"
+		"common_bldg_controlzone_large_bump"
+		"common_bldg_commandpost"
+		"common_bldg_commandpost_bump"
+	}
+}

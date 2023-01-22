@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_cell"
+		"tat3_bldg_respillar"
+		"tat3_bldg_rust"
+		"tat3_bldg_jabba_pal_02"
+		"tat3_bldg_reservoirtile"
+		"tat3_bldg_reservoir_02"
+	}
+}

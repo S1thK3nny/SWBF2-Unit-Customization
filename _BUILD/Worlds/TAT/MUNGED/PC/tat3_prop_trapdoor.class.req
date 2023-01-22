@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"animbank"
+		"tat3_prop_trapdoor"
+	}
+	REQN
+	{
+		"anim"
+		"idle"
+		"open"
+	}
+	REQN
+	{
+		"model"
+		"tat3_prop_trapdoor"
+	}
+}

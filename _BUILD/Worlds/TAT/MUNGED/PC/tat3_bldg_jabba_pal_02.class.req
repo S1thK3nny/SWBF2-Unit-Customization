@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_bldg_jabba_pal_02"
+	}
+	REQN
+	{
+		"class"
+		"tat3_prop_static_light"
+	}
+	REQN
+	{
+		"config"
+		"tat3_white_light01"
+	}
+}

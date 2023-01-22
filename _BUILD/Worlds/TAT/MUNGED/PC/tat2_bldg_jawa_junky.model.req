@@ -1,0 +1,23 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat_skiff01_lowrez"
+		"sandcrawler_lowrez"
+		"tat2_bldg_crashed_spaceship3_lowrez"
+		"crawler_tread_lowrez"
+		"tat2_bldg_jawa_junky"
+		"tat2_bldg_crashed_spaceship3"
+		"sandcrawler"
+		"sandcrawler_bump"
+		"tat2_bldg_crashed_spaceship1"
+		"tat_skiff01"
+		"tat_skiff01_bump"
+		"tat_barge"
+		"tat_barge_bump"
+		"crawler_tread"
+		"crawler_tread_bump"
+	}
+}

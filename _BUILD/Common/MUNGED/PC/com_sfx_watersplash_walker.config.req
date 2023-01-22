@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_dirt2"
+		"com_sfx_smoke4"
+		"flare0"
+		"com_sfx_flashring1"
+	}
+}

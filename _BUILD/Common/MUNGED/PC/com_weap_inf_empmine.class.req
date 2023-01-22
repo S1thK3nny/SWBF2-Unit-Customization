@@ -1,0 +1,16 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"com_weap_inf_landmine_placed"
+		"com_1st_weap_inf_landmine"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_inf_empmine_exp"
+		"com_weap_ord_exp"
+	}
+}

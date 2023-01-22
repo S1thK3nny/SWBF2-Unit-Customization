@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_prop_fan"
+		"tat3_prop_fan_shadow"
+	}
+}

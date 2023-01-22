@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat2_bldg_set03"
+		"tat2_bldg_set03_bump"
+		"tat2_bldg_set04"
+		"tat2_bldg_set04_bump"
+	}
+}

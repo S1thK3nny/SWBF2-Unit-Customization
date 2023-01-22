@@ -1,0 +1,18 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_dirt1"
+		"com_sfx_flashring2"
+		"com_sfx_laser_red"
+	}
+	REQN
+	{
+		"model"
+		"com_sfx_lightningball1"
+		"com_sfx_lightningball2"
+		"com_sfx_lightningball3"
+	}
+}

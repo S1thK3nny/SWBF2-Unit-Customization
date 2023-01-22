@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"spa_shiptoship_turret_ord"
+	}
+}

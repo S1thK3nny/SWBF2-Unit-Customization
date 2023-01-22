@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_torture_floor"
+		"tat_prop_torture_light"
+		"tat3_bldg_torture"
+		"tat3_bldg_cell_04"
+	}
+}

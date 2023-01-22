@@ -1,0 +1,60 @@
+SkyInfo()
+{
+	Enable(1);
+	FogColor(85,108,142,128);
+	PS2()
+	{
+		FogRange(0, 0);
+		NearSceneRange(0.5, 85.0, 100.0);
+		FarSceneRange(5000.0);
+		SplitOptions()
+		{
+			PropClusterEnable(1);
+			PropClusterFadeAdj(0.6);
+			PropClusterDensity(0.1);
+		}
+	}
+	XBOX()
+	{
+		FogRange(-200.0, 1300.0);
+		NearSceneRange(0.5, 85.0, 100.0);
+		FarSceneRange(3000.0);
+		NearSplitScreenRange(0.2, 110.0, 160.0);
+		FarSplitScreenRange(0.0);
+		SplitOptions()
+		{
+			FogRange(5.0, 140.0);
+			PropClusterEnable(0);
+		}
+	}
+	PC()
+	{
+		NearSceneRange(30.0, 160.0, 40.0, 200.0);
+		FarSceneRange(5000.0, 5000.0);
+
+		FarSceneRange(5000.0);
+		FogRange(-100.0, 600.0);
+	}
+	
+}
+
+
+DomeInfo()
+{
+	Texture("sky_yav2");
+	Angle(-90.000000);
+	Ambient(255.000000, 255.000000, 255.000000);
+	Filter(1);
+	Threshold(150);	
+	Intensity(50);
+
+	Softness(1);
+	SoftnessParam(60);
+
+	DomeModel()
+	{	
+		Geometry("sky_yav2");
+	}
+
+
+}

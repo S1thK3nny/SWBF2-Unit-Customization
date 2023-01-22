@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_guided_rocket_ord"
+	}
+	REQN
+	{
+		"model"
+		"com_weap_missile"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_protontorpedo"
+	}
+}

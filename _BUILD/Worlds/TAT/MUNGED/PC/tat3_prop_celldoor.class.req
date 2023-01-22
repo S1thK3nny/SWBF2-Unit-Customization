@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"animbank"
+		"tat3_prop_celldoor"
+	}
+	REQN
+	{
+		"anim"
+		"open"
+	}
+	REQN
+	{
+		"model"
+		"tat3_prop_celldoor"
+	}
+}

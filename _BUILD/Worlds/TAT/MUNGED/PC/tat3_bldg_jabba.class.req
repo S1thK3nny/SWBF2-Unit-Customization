@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"animbank"
+		"tat3_bldg_jabba"
+	}
+	REQN
+	{
+		"anim"
+		"idle"
+		"grab"
+	}
+	REQN
+	{
+		"model"
+		"tat3_bldg_jabba"
+	}
+}

@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"class"
+		"com_weap_veh_laser"
+		"tur_weap_laser_auto_ord"
+	}
+}

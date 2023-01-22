@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat_prop_homestead_lamp"
+	}
+	REQN
+	{
+		"class"
+		"whitelight_nocone"
+	}
+}

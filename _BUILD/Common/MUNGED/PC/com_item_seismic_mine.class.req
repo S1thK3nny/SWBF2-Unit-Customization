@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"animset"
+		"human_grenade"
+	}
+	REQN
+	{
+		"class"
+		"com_item_seismic_mine"
+	}
+}

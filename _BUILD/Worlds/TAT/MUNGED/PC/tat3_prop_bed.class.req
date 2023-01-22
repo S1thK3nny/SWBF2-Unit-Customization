@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_prop_bed"
+	}
+	REQN
+	{
+		"class"
+		"tat3_bldg_jabba"
+	}
+}

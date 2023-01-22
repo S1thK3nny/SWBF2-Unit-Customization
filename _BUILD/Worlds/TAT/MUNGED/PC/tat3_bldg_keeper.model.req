@@ -1,0 +1,24 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_pit_metal_a"
+		"tat3_bldg_jabba_pal_01"
+		"tat3_bldg_cell_04"
+		"tat3_prop_rug"
+		"tat3_prop_bed"
+		"gam_1st_weap_inf_axe"
+		"tat3_prop_table"
+		"tat3_bldg_cell_03"
+		"tat3_prop_barracksbed"
+		"tat3_bldg_torture_pipes"
+		"tat3_prop_carbonite"
+		"tat3_prop_bong01"
+		"tat3_bldg_cell"
+		"tat3_bldg_reservoir_02"
+		"tat3_bldg_pit_detail"
+		"tat3_bldg_keeper_wall"
+	}
+}

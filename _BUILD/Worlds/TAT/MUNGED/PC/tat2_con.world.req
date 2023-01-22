@@ -1,0 +1,30 @@
+
+ucft
+{
+	REQN
+	{
+		"light"
+		"tat2_con"
+	}
+	REQN
+	{
+		"terrain"
+		""
+	}
+	REQN
+	{
+		"config"
+		""
+	}
+	REQN
+	{
+		"path"
+		""
+	}
+	REQN
+	{
+		"class"
+		"com_bldg_controlzone"
+		"com_item_vehicle_spawn"
+	}
+}

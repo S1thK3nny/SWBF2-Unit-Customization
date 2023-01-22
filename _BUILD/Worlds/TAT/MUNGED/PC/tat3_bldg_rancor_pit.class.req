@@ -1,0 +1,16 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_bldg_rancor_pit"
+	}
+	REQN
+	{
+		"class"
+		"tat3_bldg_rancor"
+		"tat3_light_pit"
+		"tat3_light_blue"
+	}
+}

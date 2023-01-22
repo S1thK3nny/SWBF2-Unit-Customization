@@ -1,0 +1,13 @@
+
+ucft
+{
+	FILE
+	{
+		"english.loc"
+		"spanish.loc"
+		"italian.loc"
+		"french.loc"
+		"german.loc"
+		"uk_english.loc"
+	}
+}

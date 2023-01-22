@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="lightbeam" skinned="no" debuginfo="no" texcoord="no">
+	<pipeline id="1">
+		<state id="0">
+			<pass transform="position" lighting="none">
+				<vertexshader target="vs_1_1">
+				#include "pcRedVertexShaderMacros.h"
+
+				; project the position into screen space		
+				POS_PROJECT(oPos)
+
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+				; clamp to [0.0,1.0] and square it to fade transparent objects faster
+				max R_TEMP.w, R_TEMP.w, c[C_CONST0].x
+				min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+				mul R_TEMP.w, R_TEMP.w, R_TEMP.w
+				; output color with lighting and near scene fade
+				mul oD0.xyz, R_MATERIAL_COLOR.xyz, c[C_HDR].zzz	
+				mul oD0.w, R_MATERIAL_COLOR.w, R_TEMP.w
+				</vertexshader>
+
+				<pixelshader target="ps_1_1">
+				mov r0, v0
+				</pixelshader>			
+			</pass>
+		</state>
+	</pipeline>
+</shader>

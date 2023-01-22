@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_dirt2"
+		"com_sfx_waterfoam1"
+		"com_sfx_flashring1"
+	}
+}

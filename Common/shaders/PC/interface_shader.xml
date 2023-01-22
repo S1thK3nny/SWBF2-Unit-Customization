@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="interface" skinned="no">
+
+	<pipeline id="1">
+	
+		<!-- MASKED BITMAP ELEMENT -->	
+		<state id="0">
+			<pass transform="none" lighting="none">
+				<vertexshader target="vs_1_1">
+					#include "pcRedVertexShaderMacros.h"
+					#include "pcRedVertexShaderConstants.h"
+
+					dcl_position		V_POS
+					dcl_texcoord0		V_TEXCOORDS
+					dcl_texcoord1		V_TEXCOORDS2
+
+					; project the position into screen space and post-transform xy in screenspace
+					dp4 R_WORLD_POS.x, V_POS, c[C_OBJ_WORLD_M0]
+					dp4 R_WORLD_POS.y, V_POS, c[C_OBJ_WORLD_M1]
+					dp4 R_WORLD_POS.z, V_POS, c[C_OBJ_WORLD_M2]
+					mov R_WORLD_POS.w, c[C_CONST0].z
+					dp4 R_POS.x, R_WORLD_POS, c[C_WORLD_PROJ_M0]
+					dp4 R_POS.y, R_WORLD_POS, c[C_WORLD_PROJ_M1]
+					dp4 oPos.z, R_WORLD_POS, c[C_WORLD_PROJ_M2]
+					dp4 oPos.w, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+					mad oPos.xy, R_POS.xy, c[C_CUSTOM_MIN].xy, c[C_CUSTOM_MIN].zw
+
+					; decompress texcoords
+					mul oT0, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+					mul oT1, V_TEXCOORDS2, c[C_NORMALTEX_DECOMPRESS].zzzw
+				</vertexshader>
+				
+				<pixelshader target="ps_1_1">
+					
+					tex t0	// bitmap
+					tex t1	// mask
+
+					// r0 = main * lighting + specular
+					mul r0, t0, c0
+					mul r0, t1, r0
+					
+				</pixelshader>
+				
+			</pass>
+		</state>
+
+		<!-- VECTOR ELEMENT -->	
+		<state id="1">
+			<pass transform="none" lighting="none" vertexcolor="yes">
+				<vertexshader target="vs_1_1">
+					#include "pcRedVertexShaderMacros.h"
+					#include "pcRedVertexShaderConstants.h"
+
+					dcl_position		V_POS
+					dcl_color			V_COLOR
+
+					; project the position into screen space and post-transform xy in screenspace
+					dp4 R_WORLD_POS.x, V_POS, c[C_OBJ_WORLD_M0]
+					dp4 R_WORLD_POS.y, V_POS, c[C_OBJ_WORLD_M1]
+					dp4 R_WORLD_POS.z, V_POS, c[C_OBJ_WORLD_M2]
+					mov R_WORLD_POS.w, c[C_CONST0].z
+					dp4 R_POS.x, R_WORLD_POS, c[C_WORLD_PROJ_M0]
+					dp4 R_POS.y, R_WORLD_POS, c[C_WORLD_PROJ_M1]
+					dp4 oPos.z, R_WORLD_POS, c[C_WORLD_PROJ_M2]
+					dp4 oPos.w, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+					mad oPos.xy, R_POS.xy, c[C_CUSTOM_MIN].xy, c[C_CUSTOM_MIN].zw
+
+					; move vertex color (if one exists)		
+					mov oD0, V_COLOR
+				</vertexshader>
+
+				<pixelshader target="ps_1_1">
+				
+					// r0 = interface element color * vertex color
+					mul r0, v0, c0
+					
+				</pixelshader>
+								
+			</pass>
+		</state>
+
+		<!-- BITMAP ELEMENT WITH NO TEXTURE -->
+		<state id="2">
+			<pass transform="none" lighting="none">
+				<vertexshader target="vs_1_1">
+					#include "pcRedVertexShaderMacros.h"
+					#include "pcRedVertexShaderConstants.h"
+					
+					dcl_position		V_POS
+
+					; project the position into screen space and post-transform xy in screenspace
+					dp4 R_WORLD_POS.x, V_POS, c[C_OBJ_WORLD_M0]
+					dp4 R_WORLD_POS.y, V_POS, c[C_OBJ_WORLD_M1]
+					dp4 R_WORLD_POS.z, V_POS, c[C_OBJ_WORLD_M2]
+					mov R_WORLD_POS.w, c[C_CONST0].z
+					dp4 R_POS.x, R_WORLD_POS, c[C_WORLD_PROJ_M0]
+					dp4 R_POS.y, R_WORLD_POS, c[C_WORLD_PROJ_M1]
+					dp4 oPos.z, R_WORLD_POS, c[C_WORLD_PROJ_M2]
+					dp4 oPos.w, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+					mad oPos.xy, R_POS.xy, c[C_CUSTOM_MIN].xy, c[C_CUSTOM_MIN].zw
+				</vertexshader>
+			
+				<pixelshader target="ps_1_1">
+				
+					// r0 = constant
+					mov r0, c0
+					
+				</pixelshader>
+			
+			</pass>
+		</state>
+
+		<!-- BITMAP ELEMENT WITH TEXTURE -->	
+		<state id="3">
+			<pass transform="none" lighting="none">
+			
+				<vertexshader target="vs_1_1">
+					#include "pcRedVertexShaderMacros.h"
+					#include "pcRedVertexShaderConstants.h"
+
+					dcl_position		V_POS
+					dcl_texcoord0		V_TEXCOORDS
+
+					; project the position into screen space and post-transform xy in screenspace
+					dp4 R_WORLD_POS.x, V_POS, c[C_OBJ_WORLD_M0]
+					dp4 R_WORLD_POS.y, V_POS, c[C_OBJ_WORLD_M1]
+					dp4 R_WORLD_POS.z, V_POS, c[C_OBJ_WORLD_M2]
+					mov R_WORLD_POS.w, c[C_CONST0].z
+					dp4 R_POS.x, R_WORLD_POS, c[C_WORLD_PROJ_M0]
+					dp4 R_POS.y, R_WORLD_POS, c[C_WORLD_PROJ_M1]
+					dp4 oPos.z, R_WORLD_POS, c[C_WORLD_PROJ_M2]
+					dp4 oPos.w, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+					mad oPos.xy, R_POS.xy, c[C_CUSTOM_MIN].xy, c[C_CUSTOM_MIN].zw
+
+					; decompress texcoords
+					mul oT0, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+				</vertexshader>
+
+				<pixelshader target="ps_1_1">
+				
+					tex t0	// diffuse map
+
+					// r0 = texture * constant
+					mul r0, t0, c0
+					
+				</pixelshader>
+				
+			</pass>
+		</state>
+		
+	</pipeline>
+</shader>

@@ -1,0 +1,22 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"rep_icon"
+		"flag_icon"
+	}
+	REQN
+	{
+		"class"
+		"com_icon_neutral_cloth"
+		"com_icon_neutral_carried_cloth"
+	}
+	REQN
+	{
+		"model"
+		"com_icon_neutral_flag"
+		"com_icon_neutral_flag_carried"
+	}
+}

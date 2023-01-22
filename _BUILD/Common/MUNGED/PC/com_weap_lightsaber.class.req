@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_all_rifle_icon"
+	}
+	REQN
+	{
+		"animset"
+		"human_melee"
+	}
+	REQN
+	{
+		"model"
+		"rep_weap_inf_rifle"
+	}
+}

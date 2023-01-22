@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_flashball2"
+		"underlitesmoke2"
+		"com_sfx_lightning2"
+	}
+}

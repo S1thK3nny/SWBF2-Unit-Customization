@@ -1,0 +1,19 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_bldg_torture_main_3"
+	}
+	REQN
+	{
+		"config"
+		"prop_steamgrate"
+	}
+	REQN
+	{
+		"class"
+		"tat3_prop_flare02_light"
+	}
+}

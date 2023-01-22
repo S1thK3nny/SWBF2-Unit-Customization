@@ -1,0 +1,17 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat2_bldg_crashed_spaceship2"
+		"tat2_bldg_crashed_spaceship2_bump"
+		"tat2_bldg_common_detail"
+		"tat2_bldg_crashed_spaceship3"
+		"tat2_bldg_crashed_spaceship2_lowrez"
+		"tat2_bldg_crashed_spaceship1_lowrez"
+		"tat2_bldg_crashed_spaceship3_lowrez"
+		"tat2_bldg_crashed_spaceship1"
+		"tat2_bldg_crashed_spaceship1_bump"
+	}
+}

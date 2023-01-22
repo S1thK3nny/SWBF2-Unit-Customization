@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_laser_orange"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_multilasers_ord"
+		"spa_laser_turret_exp"
+	}
+}

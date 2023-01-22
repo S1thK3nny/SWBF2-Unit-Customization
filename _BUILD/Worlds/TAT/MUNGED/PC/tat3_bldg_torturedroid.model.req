@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_prop_robo"
+		"tat3_bldg_grate1"
+		"tat3_bldg_torture_pipes"
+		"tat3_prop_droidtorture"
+	}
+}

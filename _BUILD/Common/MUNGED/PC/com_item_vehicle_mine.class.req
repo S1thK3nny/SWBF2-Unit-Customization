@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"com_weap_inf_seismic_mine"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_inf_seismic_mine_exp"
+	}
+}

@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"fel1_prop_turret"
+		"fel1_prop_weap_turret_bump"
+		"bes_prop_aaa_gun_lowrez"
+	}
+}

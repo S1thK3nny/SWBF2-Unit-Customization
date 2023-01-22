@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"turret256"
+		"turret256_bump"
+	}
+}

@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_flames1"
+		"com_sfx_flames2"
+		"com_sfx_flames3"
+	}
+}

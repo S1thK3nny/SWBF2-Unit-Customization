@@ -1,0 +1,21 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_bldg_cell_hallway"
+	}
+	REQN
+	{
+		"config"
+		"prop_steampipe"
+		"prop_steamgrate"
+	}
+	REQN
+	{
+		"class"
+		"tat3_light_reservoir_03"
+		"tat3_light_l_blue"
+	}
+}

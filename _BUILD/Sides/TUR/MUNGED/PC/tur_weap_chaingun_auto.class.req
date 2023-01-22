@@ -1,0 +1,11 @@
+
+ucft
+{
+	REQN
+	{
+		"class"
+		"com_weap_inf_chaingun"
+		"tur_weap_chaingun_auto_ord"
+		"com_weap_inf_chaingun_tracer"
+	}
+}

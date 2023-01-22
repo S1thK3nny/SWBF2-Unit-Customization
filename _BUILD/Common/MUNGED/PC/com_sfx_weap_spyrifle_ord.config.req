@@ -1,0 +1,12 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_flashball1"
+		"com_sfx_flashball3"
+		"com_sfx_flashring1"
+		"com_sfx_dirt2"
+	}
+}

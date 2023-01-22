@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"config"
+		"com_sfx_weap_emp_exp_sm"
+	}
+	REQN
+	{
+		"class"
+		"tur_weap_geoturret_hidden_exp"
+	}
+}

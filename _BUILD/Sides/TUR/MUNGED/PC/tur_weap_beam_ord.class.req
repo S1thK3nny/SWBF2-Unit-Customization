@@ -1,0 +1,14 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_laser_red"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_beam_ord"
+	}
+}

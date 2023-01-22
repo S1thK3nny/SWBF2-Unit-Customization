@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_laser"
+		"tur_weap_hoth_lasermortar_laser_ord"
+	}
+}

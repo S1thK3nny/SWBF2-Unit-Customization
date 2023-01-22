@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_thermaldetonator"
+		"hud_vehicle_beam_cannon"
+	}
+}

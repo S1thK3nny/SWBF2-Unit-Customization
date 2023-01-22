@@ -1,0 +1,24 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"1playerhud"
+		"player1weapon1ammoinfinite"
+		"player1weapon2ammoinfinite"
+		"player1weapon1backdrop"
+		"player1weapon2backdrop"
+		"player1weapon1mesh"
+		"player1weapon2mesh"
+		"player1jetpack_interiorfield"
+		"player1jetpack_whiteoutsideborder"
+		"player1reticule_shape"
+		"player1reticule_bullseye"
+		"player1reticule_outline"
+		"player1reticule_hit"
+		"player1reticule_criticalhit"
+		"player1reticule_backdrop"
+		"player1hintpopuptext"
+	}
+}

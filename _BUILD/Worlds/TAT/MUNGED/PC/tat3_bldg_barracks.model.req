@@ -1,0 +1,18 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat3_bldg_cell_01"
+		"tat3_bldg_torture_pipes"
+		"tat3_bldg_cell"
+		"gam_1st_weap_inf_axe"
+		"tat3_prop_barracksbed"
+		"tat3_bldg_cell_02"
+		"tat3_bldg_jabba_pal_01"
+		"tat3_bldg_reservoir_02"
+		"tat3_bldg_jabba_floor"
+		"tat3_bldg_bunk"
+	}
+}

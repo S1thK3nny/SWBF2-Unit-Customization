@@ -1,0 +1,30 @@
+
+ucft
+{
+	REQN
+	{
+		"light"
+		"tat2_turrets"
+	}
+	REQN
+	{
+		"terrain"
+		""
+	}
+	REQN
+	{
+		"config"
+		""
+	}
+	REQN
+	{
+		"path"
+		""
+	}
+	REQN
+	{
+		"class"
+		"tur_bldg_laser"
+		"tur_bldg_tat_barge"
+	}
+}

@@ -1,0 +1,28 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_enclosedturret_icon"
+	}
+	REQN
+	{
+		"model"
+		"com_bldg_chaingun_tripod"
+		"com_prop_buildzone"
+	}
+	REQN
+	{
+		"class"
+		"tur_bldg_chaingun_exp"
+		"com_holo_turret"
+		"tur_weap_chaingun"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_smokeplume"
+	}
+}

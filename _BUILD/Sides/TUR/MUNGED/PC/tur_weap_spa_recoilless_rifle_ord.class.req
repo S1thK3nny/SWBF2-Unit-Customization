@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_recoilless_ord"
+		"tur_weap_spa_recoilless_rifle_exp"
+	}
+}

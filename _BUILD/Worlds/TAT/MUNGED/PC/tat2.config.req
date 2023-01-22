@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"sky_tatooine2_night"
+		"tat2_bump"
+		"tat2"
+	}
+	REQN
+	{
+		"model"
+		"tat2_sky_dome"
+		"rep_fly_assault_dome"
+		"cis_fly_fedlander_dome"
+		"all_fly_moncalamari_dome"
+		"imp_fly_destroyer_dome"
+	}
+}

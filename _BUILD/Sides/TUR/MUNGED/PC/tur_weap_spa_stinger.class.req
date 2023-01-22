@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_guided_rocket"
+		"tur_weap_spa_stinger_ord"
+	}
+}

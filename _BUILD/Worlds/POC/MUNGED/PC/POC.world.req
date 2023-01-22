@@ -1,0 +1,24 @@
+
+ucft
+{
+	REQN
+	{
+		"light"
+		"poc"
+	}
+	REQN
+	{
+		"terrain"
+		"poc"
+	}
+	REQN
+	{
+		"config"
+		"poc"
+	}
+	REQN
+	{
+		"path"
+		""
+	}
+}

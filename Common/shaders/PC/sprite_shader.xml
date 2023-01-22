@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<shader rendertype="sprite" skinned="no" debuginfo="no">
+	<pipeline id="1">
+		<state id="0">
+			<pass transform="position" lighting="none">
+				<vertexshader target="vs_1_1">
+				#include "pcRedVertexShaderConstants.h"
+				#include "pcRedVertexShaderMacros.h"
+
+				POS_PROJECT(oPos)
+
+				; decompress texcoords
+				mul oT0, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+				
+				; calculate near scene fade factor in R_TEMP.w
+				NEARSCENEFADE(R_TEMP)
+				; output color with lighting and near scene fade
+				mov oD0.xyz, R_MATERIAL_COLOR.xyz
+				mul oD0.w, R_MATERIAL_COLOR.w, R_TEMP.w
+				</vertexshader>
+
+				<pixelshader target="ps_1_1">
+				def c0, 1.0, 1.0, 1.0, 1.0
+				tex t0	       			// diffuse map
+
+				// r0.rgb = main * lighting
+				mul r0, t0, v0
+				</pixelshader>			
+			</pass>
+		</state>
+	</pipeline>
+</shader>

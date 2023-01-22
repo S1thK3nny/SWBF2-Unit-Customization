@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_1st_weap_inf_torpedo"
+		"com_1st_weap_inf_torpedo_bump"
+	}
+}

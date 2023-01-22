@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="Terrain2" skinned="no" vertexcolor="always" texcoord="never">
+
+	<vertexshader name="vs_vlit_3diffuse_blendmap" target="vs_1_1">
+
+		#include "pcRedVertexShaderConstants.h"
+		#include "pcRedVertexShaderMacros.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+
+		; transform 4 texture coordinates
+
+		dp4 oT0.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+2]
+
+		dp4 oT1.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+4]
+
+		dp4 oT2.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+6]
+
+		dp4 oT3.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+7]
+		dp4 oT3.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+8]
+
+		; output texture layer alphas to oD0.rgb (oD0.a will be implicit)
+		;mov R_TEMP.w, V_COLOR.w
+		;mov R_TEMP.z, V_NORMAL.w
+		;mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		;mov R_TEMP.x, c[C_CONST0].z
+		;dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		;mov oD0.xyz, R_TEMP.xyz
+
+
+<!--
+		; pack 3 layer alphas into oD0.xyz
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		;mov R_TEMP.y, c[C_CUSTOM_MIN+0].w
+		
+		mov R_TEMP.x, c[C_CONST0].z
+		;dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0, R_TEMP
+		-->
+
+
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w		
+		;dp3 R_TEMP.y, R_TEMP.wzx, c[C_CONST0].wwz		; oD0.y = 1 - a0 - a1
+		mov R_TEMP.x, c[C_CONST0].z					; a3 = 0
+		
+		mov oD0, R_TEMP
+		;mov oD0, V_NORMAL.w
+
+
+		; write intensity of directional light to oD0.x
+		mov oD0.x, R_DIFFUSE_LIGHTING.w
+
+		mad R_TEMP, R_DIFFUSE_LIGHTING, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		mov oD1.xyz, R_TEMP.xyz
+		
+		;mul oD1.xyz, R_TEMP.xyz, R_MATERIAL_COLOR.xyz
+
+		mov oD1.w, R_MATERIAL_COLOR.w
+
+
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+
+	</vertexshader>
+
+	<!--	
+	Blends 3 diffuse texture layers based on a combination of vertex blendweights and or an input texture blend map
+	-->
+	<pixelshader name="ps_vlit_3diffuse_blendmap" target="ps_1_1">
+
+		; c0 = SunColor * MaterialColor
+		def c1, 1, 0, 0, 0
+		def c2, 0, 1, 0, 0
+		def c3, 0.5, 0.5, 0.5, 1.0
+		def c4, 1, 0, 0, 0.8
+		def c5, 0, 1, 1, 1
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; diffuse map 2
+		tex t3	; blendmap or detail map
+		
+		;v0.gba = blend factors for t2,1,0 respectively
+		;v0.r = unused
+		;v1.rgb = vertex lighting
+		;v1.a = unused (material color)
+
+		; blend and light 3 diffuse maps - r0 = (t0*v0.a + t1*v0.b + t2*v0.g) * v1.rgb
+		
+		;mov r0, c4
+		;mov r0, t2
+		;mov r0, r1
+		
+	
+		
+		dp3_sat r1, v0, c2			; r1.rgb = v0.g
+						
+		mul r0.rgb, t2, r1
+		+mov r1.a, v0.b				; r1.a = v0.b
+		
+		mad r0.rgb, t1, r1.a, r0
+		+add r1.a, 1-r1.b,-r1.a		; r1.a = 1-v0.g - v0.b
+		
+		mad r0.rgb, t0, r1.a, r0	; r0.rgb = blended diffuse maps
+		+mov r0.a, c3.a
+
+		mul r0.rgb, r0, v1
+
+		mul_x2 r0.rgb, r0, t3
+		;+mov r0.a, c3.a
+		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2		
+		
+		; test
+		<!--
+		mov r0.rgb, v1.rgb
+		+mov r0.a, 1-zero.a
+		-->
+
+	</pixelshader>
+
+
+	<vertexshader name="vs_shadow_detail_projectedtex" target="vs_1_1">
+
+		#include "pcRedVertexShaderConstants.h"
+		#include "pcRedVertexShaderMacros.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+
+		; transform texture coordinates (2)
+		dp4 oT0.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+2]
+
+		dp4 oT1.x, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS.xyz, c[C_CUSTOM_MIN+4]
+
+		; projection texture coordinates
+		dp4 oT2.x, R_WORLD_POS, c[C_LIGHT_PROJ_M0]
+		dp4 oT2.y, R_WORLD_POS, c[C_LIGHT_PROJ_M1]
+		dp4 oT2.z, R_WORLD_POS, c[C_LIGHT_PROJ_M2]
+		dp4 oT2.w, R_WORLD_POS, c[C_LIGHT_PROJ_M3]
+		
+		mul R_TEMP.xyz, R_STATIC_DIFFUSE_LIGHTING.w, R_MATERIAL_COLOR.xyz
+		mul oD1.xyz, c[C_LIGHT_PROJ_COLOR].xyz, R_TEMP.xyz
+
+		; transform shadow map coordinates
+		dp4 oT3.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT3.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT3.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT3.z, c[C_CONST0].x
+
+		; multiply lighting color with material
+		mad R_TEMP, R_DIFFUSE_LIGHTING, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		mov oD0.w, R_DIFFUSE_LIGHTING.w
+		;mul oD0.xyz, R_TEMP.xyz, R_MATERIAL_COLOR.xyz
+		mov oD0.xyz, R_TEMP.xyz
+		mov oD0.xyz, R_DIFFUSE_LIGHTING.xyz
+		
+
+
+		; project position and fog
+
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+
+
+	</vertexshader>
+
+	<!--	
+	Combines shadow map, detail map (two), and optional projected light texture
+	if PerPixelDiffuseLighting is enabled, then we use a blank projected light texture
+	-->
+	<pixelshader name="ps_shadow_detail_projectedtex" target="ps_1_1">
+		def c0, 0.5, 0.5, 0.5, 1.0
+		def c1, 1, 0, 0, 0.8
+
+		tex t0	// detail map 0
+		tex t1	// detail map 1
+		tex t2  // projection tex
+		tex t3	// shadow map
+		;v0.rgb = lighting*material
+		;v1.rgb = proj light atten * material color
+		;v0.a = shadow light atten
+		
+		; out.rgb = 2*t0 * 2*t1 * (1 - (v0.a * (1-t3.a))) * (v0 + (c1.a*t3.a + (1-c1.a)) * t2*v1)
+
+<!--
+		mov r0.rgb, v0
+		+mov r0.a, c0.a
+-->
+
+		mul r0.rgb,t2,v1
+		+lrp r1.a, c1.a, t3.a, c1.a
+		
+		mad r0.rgb,r0,r1.a,v0
+		+mul_sat r0.a, v0.a, 1-t3.a		
+		
+		mul_x2 r1.rgb, 1-r0.a, t0			
+		mul_x2 r1.rgb, r1, t1
+		
+
+		mul r0.rgb, r0, r1
+		+mov r0.a, c0.a
+		;+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2		
+<!--
+-->
+		
+
+
+	</pixelshader>
+
+	<pipeline id="1">
+
+		<!-- diffuse blend only -->
+		<state id="0">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs_vlit_3diffuse_blendmap"/>
+				<pixelshader use="ps_vlit_3diffuse_blendmap"/>
+			</pass>
+		</state>
+
+		<!-- diffuse blend pass, detail*shadow*projlight pass-->
+		<state id="1">
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs_vlit_3diffuse_blendmap"/>
+				<pixelshader use="ps_vlit_3diffuse_blendmap"/>
+			</pass>
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs_shadow_detail_projectedtex"/>
+				<pixelshader use="ps_shadow_detail_projectedtex"/>
+			</pass>
+		</state>
+	
+	</pipeline>
+
+</shader>

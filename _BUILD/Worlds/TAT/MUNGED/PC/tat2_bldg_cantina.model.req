@@ -1,0 +1,25 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"tat2_bldg_set06"
+		"tat2_bldg_set06_bump"
+		"tat2_bldg_set03_lowrez"
+		"tat2_bldg_cantina_dispencers"
+		"tat2_bldg_cantina_furniture04"
+		"tat2_bldg_cantina_ceilig_05"
+		"tat2_bldg_cantina_furniture07"
+		"tat2_bldg_cantina_furniture01"
+		"tat2_bldg_cantina01"
+		"tat2_bldg_cantina01_bump"
+		"tat2_bldg_base_grit"
+		"tat2_bldg_set04"
+		"tat2_bldg_set04_bump"
+		"tat2_bldg_set07"
+		"tat2_bldg_set07_bump"
+		"tat2_bldg_set03"
+		"tat2_bldg_set03_bump"
+	}
+}

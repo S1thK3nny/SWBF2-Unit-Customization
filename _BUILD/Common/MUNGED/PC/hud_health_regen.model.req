@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_white"
+		"item_powerup_health"
+	}
+}

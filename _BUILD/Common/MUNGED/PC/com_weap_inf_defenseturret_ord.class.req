@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_laser_red"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_ord_exp"
+		"com_sfx_watersplash_ord"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_inf_ord_hum_sm"
+	}
+}

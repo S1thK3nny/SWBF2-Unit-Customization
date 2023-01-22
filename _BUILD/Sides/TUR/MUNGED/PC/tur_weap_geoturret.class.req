@@ -1,0 +1,16 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"reticule_rifle"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"tur_weap_geoturret_hidden"
+		"tur_weap_geoturret_ord"
+	}
+}

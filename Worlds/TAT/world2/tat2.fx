@@ -1,0 +1,23 @@
+Effect("ColorControl")
+{
+	PC()
+	{
+		GammaBrightness(0.6);
+		GammaContrast(0.7);
+		GammaHue(0.0);
+		GammaColorBalance(0.5);
+	}
+	XBOX()
+	{
+		Enable(1);
+		GammaBrightness(0.46);
+		GammaContrast(0.48);
+	}
+}
+
+Effect("Shadow")
+{
+	Enable(1)
+	BlurEnable(0)
+	Intensity(0.35)
+}

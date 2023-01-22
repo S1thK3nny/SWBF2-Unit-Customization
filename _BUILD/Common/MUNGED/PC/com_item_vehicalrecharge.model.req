@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_item_vehicalrecharge"
+		"com_item_vehicalrecharge_bump"
+	}
+}

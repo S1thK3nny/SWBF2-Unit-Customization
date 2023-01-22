@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"cis_bldg_boxturret"
+		"cis_bldg_boxturret_lowrez"
+	}
+}

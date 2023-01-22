@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hoth_bldg_minigun_turret"
+		"com_prop_barriers"
+	}
+}

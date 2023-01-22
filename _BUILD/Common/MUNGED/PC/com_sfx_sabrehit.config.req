@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_flashball3"
+		"com_sfx_laser_orange"
+	}
+}

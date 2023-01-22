@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_item_healthrecharge"
+		"com_item_healthrecharge_bump"
+	}
+}

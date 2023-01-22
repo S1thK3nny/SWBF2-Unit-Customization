@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"weapon_scope4"
+	}
+	REQN
+	{
+		"class"
+		"com_weap_veh_fly_beam"
+		"tur_weap_spa_beam_ord"
+	}
+}

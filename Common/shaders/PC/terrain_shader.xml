@@ -1,0 +1,1686 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="Terrain" skinned="no" vertexcolor="always" texcoord="never">
+
+	<!-- ************************** Far Terrain **************************** -->
+
+	<vertexshader name="vs1_far_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+		
+		; transform 2 texture coordinates
+		mad oT0.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+0].xy, c[C_CUSTOM_MIN+0].zw
+		mov oT0.zw, c[C_CONST0].xz
+		mad oT1.xy, R_WORLD_POS.xz, c[C_CUSTOM_MIN+1].xy, c[C_CUSTOM_MIN+1].zw
+		mov oT1.zw, c[C_CONST0].xz
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<pixelshader name="ps1_far" target="ps_1_1">
+		def c0, 0, 0, 0, 0
+
+		tex t0	; diffuse map
+
+		mov r0.rgb, t0
+		+mov r0.a, c0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_far_detail" target="ps_1_1">
+		def c0, 0, 0, 0, 0
+
+		tex t0	; diffuse map
+		tex t1	; far detail map
+
+		mul_x2 r0.rgb, t0, t1
+		+mov r0.a, c0.a
+	</pixelshader>
+
+
+	<!-- ************************** Near Terrain **************************** -->
+<!--
+	<vertexshader name="vs1_lowq_lighting" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform shadow map coordinates
+		dp4 oT1.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT1.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT1.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT1.z, c[C_CONST0].x
+		mov oD1.w, R_DIFFUSE_LIGHTING.w
+
+		; projection texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_LIGHT_PROJ_M0]
+		dp4 oT0.y, R_WORLD_POS, c[C_LIGHT_PROJ_M1]
+		dp4 oT0.z, R_WORLD_POS, c[C_LIGHT_PROJ_M2]
+		dp4 oT0.w, R_WORLD_POS, c[C_LIGHT_PROJ_M3]
+		; halve projection instensity to match the rest of the lighting
+		mul R_TEMP.xyz, R_STATIC_DIFFUSE_LIGHTING.w, c[C_CONST0].y
+		mul R_TEMP.xyz, R_TEMP.xyz, R_MATERIAL_COLOR.xyz
+		mul oD1.xyz, c[C_LIGHT_PROJ_COLOR].xyz, R_TEMP.xyz
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, -R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add static lighting back in
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply lighting by material color
+		mad oD0.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_lighting" target="ps_1_1">
+		;v0.rgb = lighting*material
+		;v0.a = near fade factor
+		;v1.rgb = (proj light)*material
+		;v1.a = shadow fade factor
+		;c0.a = whether or not projection light is a shadow caster
+
+		def c0, 0, 0, 0, 1
+
+		tex t0	; projection map
+		tex t1	; shadow map
+		tex t2	; detail map
+
+		mul r0.rgb,t0,v1
+		+lrp r1.a, c1.a, t1.a, c0.a
+		mad r0.rgb,r0,r1.a,v0
+		+mul_sat r0.a, v1.a, 1-t1.a
+		mul r0.rgb,r0,1-r0.a
+		+mov r0.a, v0.a
+		mul_x2 r0.rgb, r0, t1
+	</pixelshader>
+
+	<vertexshader name="vs1_lowq_main3_shadow" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT3.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT3.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT3.z, c[C_CONST0].x
+		mov oD1.w, R_DIFFUSE_LIGHTING.w		; write intensity of shadow
+
+		; output texture layer alphas to oD0.rgb (oD0.a will be implicit)
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		mov R_TEMP.x, c[C_CONST0].z
+		dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0.xyz, R_TEMP.xyz
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, -R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add static lighting back in
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply lighting by material color
+		mad oD1.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<vertexshader name="vs1_lowq_main3_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT3.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT3.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT3.z, c[C_CONST0].x
+		mov oD1.w, R_DIFFUSE_LIGHTING.w		; write intensity of shadow
+
+		; output texture layer alphas to oD0.rgb (oD0.a will be implicit)
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		mov R_TEMP.x, c[C_CONST0].z
+		dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0.xyz, R_TEMP.xyz
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, -R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add static lighting back in
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, R_STATIC_DIFFUSE_LIGHTING.xyz
+		; multiply lighting by material color
+		mad oD1.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<vertexshader name="vs1_lowq_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from view z
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad oD0.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+
+		; transform 1 texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz	
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_detail" target="ps_1_1">
+		def c0, 0.5, 0.5, 0.5, 1.0
+
+		tex t0	; detail map (L8)
+
+		; output  (t0.a * v0.a + 0.5 * (1 - v0.a)) for use with 2*SRC*DST blending
+		lrp r0.rgb, v0.a, t0, c0
+		+mov r0.a, c0.a
+	</pixelshader>
+
+-->
+
+	<vertexshader name="vs1_lowq_main4" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_CUSTOM_MIN+7]
+		dp4 oT3.y, R_WORLD_POS, c[C_CUSTOM_MIN+8]
+		mov oT3.zw, c[C_CONST0].xz
+
+		; output texture layer alphas to oD0.rgb (oD0.a will be implicit)
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		mov R_TEMP.x, c[C_CONST0].z
+		dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0.xyz, R_TEMP.xyz
+
+		; halve intensity of dynamic vertex lighting to match static lighting
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].yyy
+
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		add R_DIFFUSE_LIGHTING.xyz, V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul oD1.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_main4" target="ps_1_1">
+		def c0, 1, 0, 0, 0
+		def c1, 0, 1, 0, 0
+		def c2, 1, 1, 1, 0
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; diffuse map 2
+		tex t3	; diffuse map 3
+		;v0.rgb = diffuse blend factors for t3,2,1 respectively
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+
+		dp3 r0.rgb, v0, c0	; r0.rgb = v0.r
+		dp3 r1.rgb, v0, c1	; r1.rgb = v0.g
+		mul r0.rgb, t3, r0
+		mad r0.rgb, t2, r1, r0
+		+mov r1.a, v0.b
+		mad r0.rgb, t1, r1.a, r0
+		dp3 r1.rgb, v0, c2	; r1.rgb = v0.r + v0.g + v0.b
+		mad r0.rgb, t0, 1-r1, r0
+
+		; apply lighting from oD1
+		mul_x2 r0.rgb, r0, v1
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_lowq_main2" target="ps_1_1">
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		;v0.b = diffuse blend factor for t1
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+
+		mov r1.a, v0.b
+		lrp r0.rgb, r1.a, t1, t0
+
+		; apply lighting from oD1
+		mul_x2 r0.rgb, r0, v1
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_lowq_main3_shadow" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT3.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT3.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT3.z, c[C_CONST0].x
+
+		; output texture layer alphas to oD0.rgb (oD0.a will be implicit)
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		mov R_TEMP.x, c[C_CONST0].z
+		dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0.xyz, R_TEMP.xyz
+
+		; write intensity of directional light to oD1.w, halved to match static lighting
+		mul oD1.w, R_DIFFUSE_LIGHTING.w, c[C_CONST0].y
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD1.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_main3_shadow" target="ps_1_1">
+		; c0 = SunColor * MaterialColor
+		def c1, 0, 1, 0, 0
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; diffuse map 2
+		tex t3	; shadow map in alpha channel
+		;v0.gb = diffuse blend factors for t2,1 respectively
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+		;v1.a = sun intensity/2
+
+		dp3_sat r1.rgb, v0, c1			; r1.rgb = v0.g
+		mul r0.rgb, t2, r1
+		+mov r1.a, v0.b				; r1.a = v0.b
+		mad r0.rgb, t1, r1.a, r0
+		+add r1.a, 1-r1.b,-r1.a		; r1.a = 1-v0.g - v0.b
+		mad r0.rgb, t0, r1.a, r0	; r0.rgb = blended diffuse maps
+
+		+mul r1.a, v1.a, t3.a		; r1.a = shadowed sun intensity/2
+		mad r1.rgb, c0, r1.a, v1	; r1.rgb = lighting/2 + shadowed sun lighting/2
+
+		; apply lighting
+		mul_x2 r0.rgb, r0, r1
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_lowq_main2_shadow" target="ps_1_1">
+		; c0 = SunColor * MaterialColor
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t3	; shadow map in alpha channel
+		;v0.b = diffuse blend factor for t1
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+		;v1.a = sun intensity/2
+
+		mov_sat r1.a, v0.b
+		lrp r0.rgb, r1.a, t1, t0	; r0.rgb = blended diffuse maps
+
+		+mul r1.a, v1.a, t3.a		; r1.a = shadowed sun intensity/2
+		mad r1.rgb, c0, r1.a, v1	; r1.rgb = lighting/2 + shadowed sun lighting/2
+
+		mul_x2 r0.rgb, r0, r1			// apply lighting
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_lowq_main2_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from view z
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad oD0.x, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+
+		; output texture layer alphas to oD0.b (oD0.a will be implicit)
+		mov oD0.y, c[C_CONST0].x
+		mov oD0.z, V_NORMAL.w
+
+		; halve intensity of dynamic vertex lighting to match static lighting
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].yyy
+		add R_DIFFUSE_LIGHTING.xyz, V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul oD1.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_main2_detail" target="ps_1_1">
+		def c0, 1, 0, 0, 0.5
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; detail map
+		;v0.b = diffuse blend factor for t1
+		;v0.r = detail factor
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+
+		dp3 r1.rgb, v0, c0			; r1.rgb = v0.r
+		lrp r1.rgb, r1, t2, c0.a	; blend detail map with 0.5 according to detail factor
+		+mov r1.a, v0.b
+		lrp r0.rgb, r1.a, t1, t0	; blend two main textures according to v0.b
+
+		mul_x2 r0.rgb, r0, r1			// apply detail map
+		mul_x2 r0.rgb, r0, v1			// apply lighting
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_lowq_main2_detail_shadow" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from view z
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad oD0.x, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT3.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT3.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT3.z, c[C_CONST0].x
+
+		; output texture layer alphas to oD0.b (oD0.a will be implicit)
+		mov oD0.y, c[C_CONST0].x
+		mov oD0.z, V_NORMAL.w
+
+		; write intensity of directional light to oD1.w, halved to match static lighting
+		mul oD1.w, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR.w, c[C_CONST0].y
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD1.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oD0.w, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_main2_detail_shadow" target="ps_1_1">
+		; c0 = SunColor * MaterialColor
+		def c1, 1, 0, 0, 0.5
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; detail map
+		tex t3	; shadow map in alpha channel
+		;v0.r = detail factor
+		;v0.b = diffuse blend factor for t1
+		;v0.a = near fade factor
+		;v1.rgb = lighting/2
+		;v1.a = sun intensity/2
+
+		dp3_sat r1.rgb, v0, c1		; r1.rgb = v0.r
+		lrp r1.rgb, r1, t2, c1.a	; blend detail map with 1/2 according to detail factor
+
+		+mov_sat r1.a, v0.b
+		lrp r0.rgb, r1.a, t1, t0	; blend two main textures according to v0.b
+		mul_x2 r0.rgb, r0, r1		// apply detail map
+
+		+mul r1.a, v1.a, t3.a		; r1.a = shadowed sun intensity/2
+		mad r1.rgb, c0, r1.a, v1	; r1.rgb = lighting/2 + shadowed sun lighting/2
+		mul_x2 r0.rgb, r0, r1		// apply lighting
+
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, v0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_lowq_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from view z
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		mad oD0.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+
+		; transform 1 texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz	
+	</vertexshader>
+
+	<pixelshader name="ps1_lowq_detail" target="ps_1_1">
+		def c0, 0.5, 0.5, 0.5, 1.0
+
+		tex t0	; detail map (L8)
+
+		; output  (t0.a * v0.a + 0.5 * (1 - v0.a)) for use with 2*SRC*DST blending
+		lrp r0.rgb, v0.a, t0, c0
+		+mov r0.a, c0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_detail" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor in R_TEMP2.w from viewspace R_WORLD_POS.z
+		dp4 R_TEMP2.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP2.w, R_TEMP2.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		; clamp detail factor to [0..1]
+		min R_TEMP2.w, R_TEMP2.w, c[C_CONST0].z
+		max R_TEMP2.w, R_TEMP2.w, c[C_CONST0].x
+
+		; transform detail texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		; write detail factor to oT1.rgb
+		mov oT1.rgb, R_TEMP2.w
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD0.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq" target="ps_1_1">
+		;v0.rgb = lighting/2
+		;v0.a = near fade factor
+
+		mov r0.rgb, v0
+		; set output alpha to near scene fade factor
+		mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+	</pixelshader>
+
+	<pixelshader name="ps1_hiq_detail" target="ps_1_1">
+		def c0, 0.5, 0.5, 0.5, 0.5
+
+		tex t0		; detail map (L8)
+		texcoord t1	; detail factor in RGB
+		;v0.rgb = lighting/2
+		;v0.a = near fade factor
+
+		lrp r0.rgb, t1, t0, c0.a
+		mul_x2 r0.rgb, r0, v0
+		; set output alpha to near scene fade factor
+		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_detail_shadow" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor in R_TEMP2.w from viewspace z
+		dp4 R_TEMP2.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP2.w, R_TEMP2.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		; clamp detail factor to [0..1]
+		min R_TEMP2.w, R_TEMP2.w, c[C_CONST0].z
+		max R_TEMP2.w, R_TEMP2.w, c[C_CONST0].x
+
+		; transform detail texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		; write detail factor to oT1.rgb
+		mov oT1.rgb, R_TEMP2.w
+		; transform shadow texture coordinate
+		dp4 oT2.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT2.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT2.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT2.z, c[C_CONST0].x
+
+		; write color of directional light to oD1.rgb, halved to match static lighting
+		mul oD1.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR.xyz, c[C_CONST0].y
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD0.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq_shadow" target="ps_1_1">
+		tex t2		; shadow map in alpha channel
+		;v0.rgb = lighting/2
+		;v0.a = near fade factor
+		;v1.rgb = sunlight/2
+
+		; r1 = lighting
+		mad r0.rgb, v1, t2.a, v0
+		; set output alpha to near scene fade factor
+		mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+	</pixelshader>
+
+	<pixelshader name="ps1_hiq_detail_shadow" target="ps_1_1">
+		def c0, 0.5, 0.5, 0.5, 0.5
+
+		tex t0		; detail map (L8)
+		texcoord t1	; detail factor in RGB
+		tex t2		; shadow map in alpha channel
+		;v0.rgb = lighting/2
+		;v0.a = near fade factor
+		;v1.rgb = sunlight/2
+
+		; r1 = lighting
+		mad r1.rgb, v1, t2.a, v0
+		+lrp r1.a, t1.b, t0.b, c0.a
+		mul_x2 r0.rgb, r1.a, r1			// apply lighting to detail
+		; set output alpha to near scene fade factor
+		mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_bump" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor in R_TEMP2.w from viewspace R_WORLD_POS.z
+		dp4 R_TEMP2.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP2.w, R_TEMP2.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		; clamp detail factor to [0..1]
+		min R_TEMP2.w, R_TEMP2.w, c[C_CONST0].z
+		max R_TEMP2.w, R_TEMP2.w, c[C_CONST0].x
+
+		; transform detail texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD0.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+		; write detail factor to oD0.a
+		mov oD0.w, R_TEMP2.w
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; calculate normalized worldspace S = (1 - n.x*n.x, -n.x*n.y, -n.x*n.z)/sqrt(1 - n.x*n.x)
+		mad R_BINORMAL_S.xyz, -R_NORMAL.xxx, R_NORMAL.xyz, c[C_CONST0].zxx
+		rsq R_TEMP1.x, R_BINORMAL_S.x
+		mul R_BINORMAL_S.xyz, R_BINORMAL_S.xyz, R_TEMP1.x
+		; calculate normalized worldspace T = (-n.z*n.x, -n.z*n.y, 1 - n.z*n.z)/sqrt(1 - n.z*n.z)
+		mad R_BINORMAL_T.xyz, -R_NORMAL.zzz, R_NORMAL.xyz, c[C_CONST0].xxz
+		rsq R_TEMP1.x, R_BINORMAL_T.z
+		mul R_BINORMAL_T.xyz, R_BINORMAL_T.xyz, R_TEMP1.x
+
+		; output ((-L dot (S, T, N)) * (-L dot N > 0 ? 1 : 0)) _bx2 to oD1.rgb
+		dp3 R_TEMP2.x, R_BINORMAL_S,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		dp3 R_TEMP2.y, R_BINORMAL_T,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		dp3 R_TEMP2.z, R_NORMAL,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		sge R_TEMP2.w, R_TEMP2.z, c[C_CONST0].x
+		mul R_TEMP2.xyz, R_TEMP2.xyz, R_TEMP2.w
+		mad oD1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oT1.xyz, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq_bump" target="ps_1_1">
+		; c0.rgb = SunColor*MaterialColor
+
+		tex t0	; bump map (_bx2 in rgb)
+		texcoord t1	; fade factor in RGB
+		;v0.rgb = lighting/2, v0.a = detail factor
+		;v1_bx2.rgb = -L dot (S,T,N)
+
+		; near lighting
+		dp3_sat r1.rgb, t0_bx2, v1_bias		; r1.b = (-L dot Nbump)/2
+		lrp r0.a, v0.a, r1.b, v1_bias.b		; blend between near and far intensity
+		mad r0.rgb, c0, r0.a, v0			; r0.rgb = blended lighting/2
+
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, t1.b
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_bump_shadow" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor in R_TEMP2.w from viewspace R_WORLD_POS.z
+		dp4 R_TEMP2.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP2.w, R_TEMP2.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		; clamp detail factor to [0..1]
+		min R_TEMP2.w, R_TEMP2.w, c[C_CONST0].z
+		max R_TEMP2.w, R_TEMP2.w, c[C_CONST0].x
+
+		; transform detail texture coordinate
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		; transform shadow texture coordinate
+		dp4 oT2.x, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_U]
+		dp4 oT2.y, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_V]
+		dp4 oT2.w, R_WORLD_POS, c[C_SHADOWMAP_TRANSFORM_W]
+		mov oT2.z, c[C_CONST0].x
+
+		; subtract out static lighting in order to manipulate dynamic component
+		add R_DIFFUSE_LIGHTING.xyz, -V_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		mul R_DIFFUSE_LIGHTING.xyz, R_MATERIAL_COLOR.xyz, R_DIFFUSE_LIGHTING.xyz
+		; multiply dynamic lighting by 1/2 to match static lighting
+		mul R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CONST0].y
+		; calculate static lighting minus directional light/2, halved to match static lighting
+		mad R_TEMP.xyz, R_DIFFUSE_DIRECTIONAL_LIGHTING_COLOR,-c[C_CONST0].y, V_COLOR
+		;min R_TEMP.xyz, R_TEMP.xyz, c[C_CONST0].x
+		;HACK: add terrain lightning value
+		add R_DIFFUSE_LIGHTING.xyz, R_DIFFUSE_LIGHTING.xyz, c[C_CUSTOM_MIN+0].zzz
+		; add shadowed static lighting back into R_DIFFUSE_COLOR
+		mad oD0.xyz, R_MATERIAL_COLOR.xyz, R_TEMP.xyz, R_DIFFUSE_LIGHTING.xyz
+		; write detail factor to oD0.a
+		mov oD0.w, R_TEMP2.w
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; calculate normalized worldspace S = (1 - n.x*n.x, -n.x*n.y, -n.x*n.z)/sqrt(1 - n.x*n.x)
+		mad R_BINORMAL_S.xyz, -R_NORMAL.xxx, R_NORMAL.xyz, c[C_CONST0].zxx
+		rsq R_TEMP1.x, R_BINORMAL_S.x
+		mul R_BINORMAL_S.xyz, R_BINORMAL_S.xyz, R_TEMP1.x
+		; calculate normalized worldspace T = (-n.z*n.x, -n.z*n.y, 1 - n.z*n.z)/sqrt(1 - n.z*n.z)
+		mad R_BINORMAL_T.xyz, -R_NORMAL.zzz, R_NORMAL.xyz, c[C_CONST0].xxz
+		rsq R_TEMP1.x, R_BINORMAL_T.z
+		mul R_BINORMAL_T.xyz, R_BINORMAL_T.xyz, R_TEMP1.x
+
+		; output ((-L dot (S, T, N)) * (-L dot N > 0 ? 1 : 0)) _bx2 to oD1.rgb
+		dp3 R_TEMP2.x, R_BINORMAL_S,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		dp3 R_TEMP2.y, R_BINORMAL_T,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		dp3 R_TEMP2.z, R_NORMAL,-c[C_LIGHT_DIRECTIONAL0_DIR]
+		sge R_TEMP2.w, R_TEMP2.z, c[C_CONST0].x
+		mul R_TEMP2.xyz, R_TEMP2.xyz, R_TEMP2.w
+		mad oD1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; write near scene fade factor to oD0.a
+		NEARSCENEFADE(R_TEMP)
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+		; output fade factor * 0.25 + 0.5 to allow interpolation outside the range 0-1
+;		mad oD0.w, R_TEMP.w, c[C_CONST1].y, c[C_CONST1].z
+		mov oT1.xyz, R_TEMP.w
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq_bump_shadow" target="ps_1_1">
+		; c0.rgb = SunColor*MaterialColor
+		; c1.rgb = AmbientColor*MaterialColor
+
+		tex t0	; bump map (_bx2 in rgb)
+		texcoord t1	; fade factor in RGB
+		tex t2	; shadow map in alpha channel
+		;v0.rgb = (lighting - sun)/2, v0.a = detail factor
+		;v1_bx2.rgb = -L dot (S,T,N)
+
+		dp3_sat r1.rgb, t0_bx2, v1_bias		; r1.b = (-L dot Nbump)/2
+		+mul_d2 r1.a, 1-t0.b, 1-t2.a		; r1.a = (ambient bump factor)/2
+		mul r0.rgb, c0, t2.a				; r0.rgb = shadowed sun color
+		+lrp r0.a,v0.a,r1.b,v1_bias.b		; r0.a = blended sun intensity/2
+		mad r0.rgb, r0, r0.a, v0			; r0.rgb = blended lighting/2
+		+mul r1.a, r1.a, v0.a
+		mad r0.rgb, c1,-r1.a, r0			; r0.rgb -= ambient bump correction
+
+		; set output alpha to near scene fade factor
+;		+mov_x4 r0.a, v0_bias.a			// near scene alpha is d4 + 1/2
+		+mov r0.a, t1.b
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_main4" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; transform 4 texture coordinates
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+		dp4 oT1.x, R_WORLD_POS, c[C_CUSTOM_MIN+3]
+		dp4 oT1.y, R_WORLD_POS, c[C_CUSTOM_MIN+4]
+		mov oT1.zw, c[C_CONST0].xz
+		dp4 oT2.x, R_WORLD_POS, c[C_CUSTOM_MIN+5]
+		dp4 oT2.y, R_WORLD_POS, c[C_CUSTOM_MIN+6]
+		mov oT2.zw, c[C_CONST0].xz
+		dp4 oT3.x, R_WORLD_POS, c[C_CUSTOM_MIN+7]
+		dp4 oT3.y, R_WORLD_POS, c[C_CUSTOM_MIN+8]
+		mov oT3.zw, c[C_CONST0].xz
+
+		; output texture layer alphas to oD0.rgba
+		mov R_TEMP.w, V_COLOR.w
+		mov R_TEMP.z, V_NORMAL.w
+		mul R_TEMP.y, V_POS.w, c[C_CUSTOM_MIN+0].w
+		mov R_TEMP.x, c[C_CONST0].z
+		dp4 R_TEMP.x, R_TEMP.wzyx, c[C_CONST0].wwwz		; oD0.x = 1 - a0 - a1 - a2
+		mov oD0, R_TEMP
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq_main4" target="ps_1_1">
+		def c0, 1, 0, 0, 1
+		def c1, 0, 1, 0, 1
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+		tex t2	; diffuse map 2
+		tex t3	; diffuse map 3
+
+		dp3 r0.rgb, v0, c0	; r0.rgb = v0.r
+		dp3 r1.rgb, v0, c1	; r1.rgb = v0.g
+		mul r0.rgb, t3, r0
+		mad r0.rgb, t2, r1, r0
+		+mov r1.a, v0.b
+		mad r0.rgb, t1, r1.a, r0
+		mad r0.rgb, t0, v0.a, r0
+		+mov r0.a, c0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_hiq_main2" target="ps_1_1">
+		def c0, 0, 0, 0, 1
+
+		tex t0	; diffuse map 0
+		tex t1	; diffuse map 1
+
+		mov r1.a, v0.b
+		lrp r0.rgb, r1.a, t1, t0	// blend 2 main textures
+		+mov r0.a, c0.a
+	</pixelshader>
+
+	<vertexshader name="vs1_hiq_1_light" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; output world space normal to oT0.xyz to be renormalized by cube map
+		mov oT0.xyz, R_NORMAL.xyz
+
+		; calculate light0 space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs1_hiq_2_lights" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; output world space normal to oT0.xyz to be renormalized by cube map
+		mov oT0.xyz, R_NORMAL.xyz
+
+		; calculate light0 space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light1 space coordinates = (v.pos - l1.pos)/(l1.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+4].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+4].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT2.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs1_hiq_3_lights" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; output world space normal to oT0.xyz to be renormalized by cube map
+		mov oT0.xyz, R_NORMAL.xyz
+
+		; calculate light0 space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light1 space coordinates = (v.pos - l1.pos)/(l1.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+4].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+4].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT2.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light2 space coordinates = (v.pos - l2.pos)/(l2.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+5].xyz
+		mul R_TEMP2.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+5].w
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT3.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs1_hiq_bump_1_light" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		; transform detail/bump map texture coordinates to oT0
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; calculate normalized worldspace S = (1 - n.x*n.x, -n.x*n.y, -n.x*n.z)/sqrt(1 - n.x*n.x)
+		mad R_BINORMAL_S.xyz, -R_NORMAL.xxx, R_NORMAL.xyz, c[C_CONST0].zxx
+		rsq R_TEMP1.x, R_BINORMAL_S.x
+		mul R_BINORMAL_S.xyz, R_BINORMAL_S.xyz, R_TEMP1.x
+		; calculate normalized worldspace T = (-n.z*n.x, -n.z*n.y, 1 - n.z*n.z)/sqrt(1 - n.z*n.z)
+		mad R_BINORMAL_T.xyz, -R_NORMAL.zzz, R_NORMAL.xyz, c[C_CONST0].xxz
+		rsq R_TEMP1.x, R_BINORMAL_T.z
+		mul R_BINORMAL_T.xyz, R_BINORMAL_T.xyz, R_TEMP1.x
+
+		; calculate light space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs1_hiq_bump_2_lights" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		; transform detail/bump map texture coordinates to oT0
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; calculate normalized worldspace S = (1 - n.x*n.x, -n.x*n.y, -n.x*n.z)/sqrt(1 - n.x*n.x)
+		mad R_BINORMAL_S.xyz, -R_NORMAL.xxx, R_NORMAL.xyz, c[C_CONST0].zxx
+		rsq R_TEMP1.x, R_BINORMAL_S.x
+		mul R_BINORMAL_S.xyz, R_BINORMAL_S.xyz, R_TEMP1.x
+		; calculate normalized worldspace T = (-n.z*n.x, -n.z*n.y, 1 - n.z*n.z)/sqrt(1 - n.z*n.z)
+		mad R_BINORMAL_T.xyz, -R_NORMAL.zzz, R_NORMAL.xyz, c[C_CONST0].xxz
+		rsq R_TEMP1.x, R_BINORMAL_T.z
+		mul R_BINORMAL_T.xyz, R_BINORMAL_T.xyz, R_TEMP1.x
+
+		; calculate light space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light space coordinates = (v.pos - l1.pos)/(l1.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+4].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+4].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT2.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<vertexshader name="vs1_hiq_bump_3_lights" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+		#include "pcRedVertexShaderConstants.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(R_TEMP)
+		mov oPos, R_TEMP
+
+		; calculate detail fade factor from viewspace R_WORLD_POS.z, store in oD0.w, r4.w
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		mad R_TEMP.w, R_TEMP.z, c[C_CUSTOM_MIN+0].x, c[C_CUSTOM_MIN+0].y
+		min R_TEMP.w, R_TEMP.w, c[C_CONST0].z
+		mul oD0.w, R_TEMP.w, c[C_CONST0].y
+
+		; transform detail/bump map texture coordinates to oT0
+		dp4 oT0.x, R_WORLD_POS, c[C_CUSTOM_MIN+1]
+		dp4 oT0.y, R_WORLD_POS, c[C_CUSTOM_MIN+2]
+		mov oT0.zw, c[C_CONST0].xz
+
+		;NOTE: we rely on the fact that the terrain is world axis aligned
+		; calculate normalized worldspace S = (1 - n.x*n.x, -n.x*n.y, -n.x*n.z)/sqrt(1 - n.x*n.x)
+		mad R_BINORMAL_S.xyz, -R_NORMAL.xxx, R_NORMAL.xyz, c[C_CONST0].zxx
+		rsq R_TEMP1.x, R_BINORMAL_S.x
+		mul R_BINORMAL_S.xyz, R_BINORMAL_S.xyz, R_TEMP1.x
+
+		; calculate normalized worldspace T = (-n.z*n.x, -n.z*n.y, 1 - n.z*n.z)/sqrt(1 - n.z*n.z)
+		mad R_BINORMAL_T.xyz, -R_NORMAL.zzz, R_NORMAL.xyz, c[C_CONST0].xxz
+		rsq R_TEMP1.x, R_BINORMAL_T.z
+		mul R_BINORMAL_T.xyz, R_BINORMAL_T.xyz, R_TEMP1.x
+
+		; calculate light space coordinates = (v.pos - l0.pos)/(l0.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+3].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+3].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT1.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light space coordinates = (v.pos - l1.pos)/(l1.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+4].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+4].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT2.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; calculate light space coordinates = (v.pos - l2.pos)/(l2.range)
+		add R_TEMP.xyz, R_WORLD_POS.xyz,-c[C_CUSTOM_MIN+5].xyz
+		mul R_TEMP.xyz, R_TEMP.xyz, c[C_CUSTOM_MIN+5].w
+		; convert to (S, T, N) space
+		dp3 R_TEMP2.x, R_TEMP, R_BINORMAL_S
+		dp3 R_TEMP2.y, R_TEMP, R_BINORMAL_T
+		dp3 R_TEMP2.z, R_TEMP, R_NORMAL
+		; calculate light volume texture coordinates by biasing this _bx2
+		mad oT3.xyz, R_TEMP2.xyz, c[C_CONST0].y, c[C_CONST0].y
+
+		; output fog value
+		dp4 R_TEMP.z, R_WORLD_POS, c[C_WORLD_PROJ_M3]
+		FOG(R_TEMP.z, R_WORLD_POS, R_TEMP1)
+	</vertexshader>
+
+	<pixelshader name="ps1_hiq_1_light" target="ps_1_1">
+		tex t0	; bump or normalization cube map (rgb = _bx2 normal, a = luminosity)
+		tex t1	; lightvolume (rgb = _bx2 normalized dir, a = intensity)
+		;v0.a = detail factor/2
+
+		; r0.rgb = (N dot -L0) *L0.atten*L0.color
+		dp3_sat r1.rgba, t0_bx2, t1_bx2
+		mul r1.a, r1.a, t1.a
+		mul r0.rgb, r1.a, c0
+		+mul r0.a, v0.a, t0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_hiq_2_lights" target="ps_1_1">
+		tex t0	; bump or normalization cube map (rgb = _bx2 normal, a = luminosity)
+		tex t1	; lightvolume0 (rgb = _bx2 normalized dir, a = intensity)
+		tex t2	; lightvolume1 (rgb = _bx2 normalized dir, a = intensity)
+		;v0.a = detail factor/2
+
+		; r0.rgb = (N dot -L0) *L0.atten*L0.color
+		dp3_sat r1.rgba, t0_bx2, t1_bx2
+			; r0.rgb += (N dot -L1) *L1.atten*L1.color
+			dp3_sat r0.rgba, t0_bx2, t2_bx2
+		mul r1.a, r1.a, t1.a
+		mul r0.rgb, r1.a, c0
+			+mul r0.a, r0.a, t2.a
+			mad r0.rgb, r0.a, c1, r0
+		+mul r0.a, v0.a, t0.a
+	</pixelshader>
+
+	<pixelshader name="ps1_hiq_3_lights" target="ps_1_1">
+		tex t0	; bump or normalization cube map (rgb = _bx2 normal, a = luminosity)
+		tex t1	; lightvolume0 (rgb = _bx2 normalized dir, a = intensity)
+		tex t2	; lightvolume1 (rgb = _bx2 normalized dir, a = intensity)
+		tex t3	; lightvolume2 (rgb = _bx2 normalized dir, a = intensity)
+		;v0.a = detail factor/2
+
+		; r0.rgb = (N dot -L0) *L0.atten*L0.color
+		dp3_sat r1.rgba, t0_bx2, t1_bx2
+			; r0.rgb += (N dot -L1) *L1.atten*L1.color
+			dp3_sat r0.rgba, t0_bx2, t2_bx2
+		mul r1.a, r1.a, t1.a
+		mul r0.rgb, r1.a, c0
+			+mul r0.a, r0.a, t2.a
+		; r0.rgb += (N dot -L2) *L2.atten*L2.color
+		dp3_sat r1.rgba, t0_bx2, t3_bx2
+			mad r0.rgb, r0.a, c1, r0
+		+mul r1.a, r1.a, t3.a
+		mad r0.rgb, r1.a, c2, r0
+		+mul r0.a, v0.a, t0.a
+	</pixelshader>
+
+	<pipeline id="1">
+		<!--STATE_FAR:
+			p0:	Main(1) -->
+		<state id="0">
+			<pass transform="position" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_far_detail"/>
+				<pixelshader use="ps1_far"/>
+			</pass>
+		</state>
+		<!--STATE_FAR_DETAIL:
+			p0:	Main(1) *2* Detail -->
+		<state id="1">
+			<pass transform="position" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_far_detail"/>
+				<pixelshader use="ps1_far_detail"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN4:
+			p0:	Main(4) *2* (StaticVertLight + DynamicVertLight/2) -->
+		<state id="2">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main4"/>
+				<pixelshader use="ps1_lowq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN2:
+			p0:	Main(2) *2* (StaticVertLight + DynamicVertLight/2) -->
+		<state id="3">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main4"/>
+				<pixelshader use="ps1_lowq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN4_DETAIL:
+			p0:	Main(4) *2* (StaticVertLight + DynamicVertLight/2)
+			p1:	*2* (d*Detail + (1-d)/2) -->
+		<state id="4">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main4"/>
+				<pixelshader use="ps1_lowq_main4"/>
+			</pass>
+			<pass transform="position" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_lowq_detail"/>
+				<pixelshader use="ps1_lowq_detail"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN2_DETAIL:
+			p0:	Main(2) *2* (StaticVertLight + DynamicVertLight/2) *2* (d*Detail + (1-d)/2) -->
+		<state id="5">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main2_detail"/>
+				<pixelshader use="ps1_lowq_main2_detail"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN3_SHADOW:
+			p0:	Main(3) *2* (StaticVertLight + DynamicVertLight/2 - SunLight/2 + Shadow*SunLight/2) -->
+		<state id="6">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main3_shadow"/>
+				<pixelshader use="ps1_lowq_main3_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN2_SHADOW:
+			p0:	Main(2) *2* (StaticVertLight + DynamicVertLight/2 - SunLight/2 + Shadow*SunLight/2) -->
+		<state id="7">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main2_detail_shadow"/>
+				<pixelshader use="ps1_lowq_main2_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN3_DETAIL_SHADOW:
+			p0:	Main(3) *2* (StaticVertLight + DynamicVertLight/2 - SunLight/2 + Shadow*SunLight/2)
+			p1:	*2* (d*Detail + (1-d)/2) -->
+		<state id="8">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main3_shadow"/>
+				<pixelshader use="ps1_lowq_main3_shadow"/>
+			</pass>
+			<pass transform="position" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_lowq_detail"/>
+				<pixelshader use="ps1_lowq_detail"/>
+			</pass>
+		</state>
+		<!--STATE_LOWQ_MAIN2_DETAIL_SHADOW:
+			p0:	Main(2) *2* (StaticVertLight + DynamicVertLight/2 - SunLight/2 + Shadow*SunLight/2) *2* (d*Detail + (1-d)/2) -->
+		<state id="9">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_lowq_main2_detail_shadow"/>
+				<pixelshader use="ps1_lowq_main2_detail_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2) -->
+		<state id="10">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_detail"/>
+				<pixelshader use="ps1_hiq"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_DETAIL:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2) *2* (d*Detail + (1-d)/2) -->
+		<state id="11">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_detail"/>
+				<pixelshader use="ps1_hiq_detail"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2
+				 + d*(-L dot Nbump - -L dot N)*L.color/2) -->
+		<state id="12">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_bump"/>
+				<pixelshader use="ps1_hiq_bump"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_SHADOW:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2 - SunLight/2
+				 + Shadow*SunLight/2) -->
+		<state id="13">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_detail_shadow"/>
+				<pixelshader use="ps1_hiq_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_DETAIL_SHADOW:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2 - SunLight/2
+				 + Shadow*SunLight/2) *2* (d*Detail + (1-d)/2) -->
+		<state id="14">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_detail_shadow"/>
+				<pixelshader use="ps1_hiq_detail_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_SHADOW:
+			p0:	(StaticVertLight + (1-d)*DynamicVertLight/2 - Sunlight/2
+				 + Shadow*Sunlight/2 + d*(-L dot Nbump - -L dot N)*L.color/2) -->
+		<state id="15">
+			<pass transform="normals" lighting="diffuse">
+				<vertexshader use="vs1_hiq_bump_shadow"/>
+				<pixelshader use="ps1_hiq_bump_shadow"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN4_0_LIGHTS:
+			p0:	*2* Main(4) -->
+		<state id="16">
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN2_0_LIGHTS:
+			p0:	*2* Main(2) -->
+		<state id="17">
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN4_1_LIGHT:
+			p0: + d*PixelLight(1)/2
+			p1:	*2* Main(4) -->
+		<state id="18">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN2_1_LIGHT:
+			p0: + d*PixelLight(1)/2
+			p1:	*2* Main(2) -->
+		<state id="19">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN4_1_LIGHT:
+			p0: + d*BumpLight(1)/2
+			p1:	*2* Main(4) -->
+		<state id="20">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN2_1_LIGHT:
+			p0: + d*BumpLight(1)/2
+			p1:	*2* Main(2) -->
+		<state id="21">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN4_2_LIGHTS:
+			p0: + d*PixelLight(2)/2
+			p1:	*2* Main(4) -->
+		<state id="22">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_2_lights"/>
+				<pixelshader use="ps1_hiq_2_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN2_2_LIGHTS:
+			p0: + d*PixelLight(2)/2
+			p1:	*2* Main(2) -->
+		<state id="23">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_2_lights"/>
+				<pixelshader use="ps1_hiq_2_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN4_2_LIGHTS:
+			p0: + d*BumpLight(2)/2
+			p1:	*2* Main(4) -->
+		<state id="24">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_2_lights"/>
+				<pixelshader use="ps1_hiq_2_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN2_2_LIGHTS:
+			p0: + d*BumpLight(2)/2
+			p1:	*2* Main(2) -->
+		<state id="25">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_2_lights"/>
+				<pixelshader use="ps1_hiq_2_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN4_3_LIGHTS:
+			p0: + d*PixelLight(3)/2
+			p0:	*2* Main(4) -->
+		<state id="26">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN2_3_LIGHTS:
+			p0: + d*PixelLight(3)/2
+			p0:	*2* Main(2) -->
+		<state id="27">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN4_3_LIGHTS:
+			p0: + d*BumpLight(3)/2
+			p1:	*2* Main(4) -->
+		<state id="28">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN2_3_LIGHTS:
+			p0: + d*BumpLight(3)/2
+			p1:	*2* Main(2) -->
+		<state id="29">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN4_4_LIGHTS:
+			p0: + d*PixelLight(3)/2
+			p1: + d*PixelLight(1)/2
+			p2:	*2* Main(4) -->
+		<state id="30">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_MAIN2_4_LIGHTS:
+			p0: + d*PixelLight(3)/2
+			p1: + d*PixelLight(1)/2
+			p2:	*2* Main(2) -->
+		<state id="31">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN4_4_LIGHTS:
+			p0: + d*BumpLight(3)/2
+			p1: + d*BumpLight(1)/2
+			p2:	*2* Main(4) -->
+		<state id="32">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main4"/>
+			</pass>
+		</state>
+		<!--STATE_HIQ_BUMP_MAIN2_4_LIGHTS:
+			p0: + d*BumpLight(3)/2
+			p1: + d*BumpLight(1)/2
+			p2:	*2* Main(2) -->
+		<state id="33">
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_3_lights"/>
+				<pixelshader use="ps1_hiq_3_lights"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="no">
+				<vertexshader use="vs1_hiq_bump_1_light"/>
+				<pixelshader use="ps1_hiq_1_light"/>
+			</pass>
+			<pass transform="normals" lighting="none" vertexcolor="yes">
+				<vertexshader use="vs1_hiq_main4"/>
+				<pixelshader use="ps1_hiq_main2"/>
+			</pass>
+		</state>
+	</pipeline>
+</shader>

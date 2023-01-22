@@ -1,0 +1,23 @@
+
+ucft
+{
+	FILE
+	{
+		"core.lvl"
+		"common.lvl"
+		"ingame.lvl"
+		"poc.path"
+		"poc.light"
+		"yav2_main_1.texture"
+		"yav2_main_2.texture"
+		"yav2_main_3.texture"
+		"yav2_main_4.texture"
+		"yav_detail.texture"
+		"poc.terrain"
+		"sky_yav2.texture"
+		"sky_yav2.model"
+		"poc.config"
+		"poc.world"
+		"poc_conquest.lvl"
+	}
+}

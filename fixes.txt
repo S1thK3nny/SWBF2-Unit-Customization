@@ -1,0 +1,9 @@
+# v2 fixes
+- Fixed the terrain texture browser removing the file extension from the selected texture's name.
+- Fixed some materials getting incorrectly treated as always having transparency.
+- Fixed the "glow" flag in materials being ignored. Materials with this flag will now correctly be handled as emissive/unlit.
+
+# v1 fixes
+- Fixed a crash on startup relating to Direct3D 8 device creation and display mode enumeration. Typically this was reported by the Visual C++ Runtime Library as a "Runtime Error!".
+- Fixed a crash when loading .msh files containing large (in terms of vertex and triangle count) individual geometry segments.
+- Fixed a crash when loading huge (but sometimes reasonable) .tga files.

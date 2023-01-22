@@ -1,0 +1,20 @@
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"tat3_bldg_cell_entry"
+	}
+	REQN
+	{
+		"config"
+		"prop_steampipe"
+	}
+	REQN
+	{
+		"class"
+		"tat3_light_reservoir_02"
+		"tat3_prop_static_light"
+	}
+}

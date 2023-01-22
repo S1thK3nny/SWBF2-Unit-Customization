@@ -1,0 +1,15 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"com_sfx_flashring1"
+		"explode3"
+		"com_sfx_waterfoam1"
+		"thicksmoke3"
+		"com_sfx_waterfoam3"
+		"com_sfx_flashball3"
+		"com_sfx_laser_orange"
+	}
+}

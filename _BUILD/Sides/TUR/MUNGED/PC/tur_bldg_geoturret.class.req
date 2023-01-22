@@ -1,0 +1,28 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"turret_icon"
+		"hud_all_lascannon_icon"
+		"hud_geo_turret_icon"
+	}
+	REQN
+	{
+		"model"
+		"geo_bldg_geoturret"
+		"geo_bldg_geoturret_dest"
+	}
+	REQN
+	{
+		"class"
+		"tur_weap_geoturret"
+	}
+	REQN
+	{
+		"config"
+		"com_sfx_vehiclespark"
+		"com_sfx_smokeplume"
+	}
+}

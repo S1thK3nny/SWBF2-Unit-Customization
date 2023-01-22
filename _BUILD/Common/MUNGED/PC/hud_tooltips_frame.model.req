@@ -1,0 +1,10 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_black"
+		"hud_white"
+	}
+}

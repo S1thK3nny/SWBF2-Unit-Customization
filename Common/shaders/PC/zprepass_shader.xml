@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shader rendertype="zprepass" skinned="yes" debuginfo="no">
+	<vertexshader name="vs1_opaque" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+	</vertexshader>
+
+	<vertexshader name="vs1_hardedged" target="vs_1_1">
+		#include "pcRedVertexShaderMacros.h"
+
+		; project the position from world to projection space		
+		POS_PROJECT(oPos)
+		
+		; decompress texcoords
+		mul R_TEMP, V_TEXCOORDS, c[C_NORMALTEX_DECOMPRESS].zzzw
+
+		; transform texture coordinates
+		dp4 oT0.x, R_TEMP, c[C_CUSTOM_MIN+0]
+		dp4 oT0.y, R_TEMP, c[C_CUSTOM_MIN+1]
+		mov oT0.zw, c[C_CONST0].xz
+
+		; output color
+		mov oD0, R_MATERIAL_COLOR
+	</vertexshader>
+
+	<pixelshader name="ps1_opaque" target="ps_1_1">
+		def c0, 0, 0, 0, 1
+		mov r0, c0
+	</pixelshader>
+
+	<pixelshader name="ps1_hardedged" target="ps_1_1">
+//		def c0, 0, 0, 0.5, -0.01		// 0, 0, 1-alpharef, 0
+		tex t0	// diffuse map
+
+		mul r0.rgb, t0, v0
+		+mul r0.a, t0.a, v0.a
+//		+add r0.a,t0_bias.a,c0.b
+//		cnd r0.a,r0.a,v0.a,c0.a			// alpha test vs. alpharef
+	</pixelshader>
+
+	<pipeline id="1">
+		<state id="0">
+			<pass transform="position" lighting="none" vertexcolor="no" texcoord="no">
+				<vertexshader use="vs1_opaque"/>
+				<pixelshader use="ps1_opaque"/>
+			</pass>
+		</state>
+		<state id="1">
+			<pass transform="position" lighting="none" texcoord="yes">
+				<vertexshader use="vs1_hardedged"/>
+				<pixelshader use="ps1_hardedged"/>
+			</pass>
+		</state>
+	</pipeline>
+</shader>

@@ -1,0 +1,23 @@
+
+ucft
+{
+	REQN
+	{
+		"texture"
+		"hud_flag_icon"
+	}
+	REQN
+	{
+		"model"
+		"com_bldg_controlzone"
+		"com_icon_alliance"
+		"com_icon_imperial"
+		"com_icon_republic"
+		"com_icon_cis"
+	}
+	REQN
+	{
+		"class"
+		"com_holo_controlzone"
+	}
+}
