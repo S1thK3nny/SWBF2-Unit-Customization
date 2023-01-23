@@ -5,6 +5,9 @@ This project makes use of the SWBF2-Remaster API, utilizing the option scripts a
 Whilst a lot more than a concept already, this can serve as a template for future modders who would like to develop something similar.
 Note: This requires advanced knowledge of modding Battlefront 2, as well as an average level of knowledge of Lua.
 
+The main files worth looking at are the POC_option_script.lua found in CustomLVL/scripts and zzz_customize.lua in Common/scripts
+To see how zzz_customize.lua is used, refer to the tat2z_con.lua in Common/scripts/POC
+
 How do you compile and install the option script?
 
 1. Make your changes to the POC_option_script in the custom LVL folder. Incase you will copy this for your own mod, make sure to change anything named POC to your own 3 letter mod id. This also goes for the rema.modName.POC localization string so that it will show up ingame correctly.
