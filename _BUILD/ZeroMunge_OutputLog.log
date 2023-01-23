@@ -4386,3 +4386,383 @@ Opened logfile ZeroMunge_OutputLog.log  2023-01-22 6:40:30
 8:00:20   ******** FINISHED JOB
 8:00:20   **************************************************************
 8:36:12   [Info]	Auto-save is enabled. Saving file list to path: "E:\BF2_Modtools\data_POC\_BUILD\ZeroMunge-auto.zmd"
+9:43:41   
+9:43:41   **************************************************************
+9:43:41   ******** STARTED JOB
+9:43:41   **************************************************************
+9:43:41   
+9:43:41   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Common\munge.bat"
+9:43:41   
+9:43:41   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Common\..\..\..\ToolsFL\Bin
+9:43:41   [Munge]	Copying premunged files from MUNGED...
+9:43:41   [Munge]	0 Datei(en) kopiert
+9:43:41   [Munge]	Copying premunged files from MUNGED\PC...
+9:43:41   [Munge]	Done
+9:43:41   [Munge]	        1 Datei(en) verschoben.
+9:43:41   [Munge]	        1 Datei(en) verschoben.
+9:43:41   [Munge]	Munging zzz_customize.lua
+9:43:41   [Munge]	        1 Datei(en) verschoben.
+9:43:41   [Munge]	        1 Datei(en) verschoben.
+9:43:41   [Munge]	        1 Datei(en) verschoben.
+9:43:41   [Munge]	Munging bump_shader.xml
+9:43:42   [Munge]	Munging decal_shader.xml
+9:43:42   [Munge]	Munging detail_shader.xml
+9:43:42   [Munge]	Munging filtercopy_shader.xml
+9:43:42   [Munge]	Munging flare_shader.xml
+9:43:42   [Munge]	Munging foliage_shader.xml
+9:43:42   [Munge]	Munging hdr_shader.xml
+9:43:42   [Munge]	Munging interface_shader.xml
+9:43:42   [Munge]	Munging lightbeam_shader.xml
+9:43:42   [Munge]	Munging normalmapadder_shader.xml
+9:43:42   [Munge]	Munging normal_shader.xml
+9:43:43   [Munge]	Munging normal_terrain_shader.xml
+9:43:43   [Munge]	Munging ocean_shader.xml
+9:43:43   [Munge]	Munging particle_shader.xml
+9:43:43   [Munge]	Munging perpixeldiffuselighting_shader.xml
+9:43:43   [Munge]	Munging pervertexdiffuselighting_shader.xml
+9:43:43   [Munge]	Munging prereflection_shader.xml
+9:43:43   [Munge]	Munging rain_shader.xml
+9:43:43   [Munge]	Munging refraction_shader.xml
+9:43:43   [Munge]	Munging sample_shader.xml
+9:43:43   [Munge]	Munging scroll_shader.xml
+9:43:44   [Munge]	Munging shadowquad_shader.xml
+9:43:44   [Munge]	Munging shield_shader.xml
+9:43:44   [Munge]	Munging skyfog_shader.xml
+9:43:44   [Munge]	Munging specularlighting_shader.xml
+9:43:44   [Munge]	Munging specular_shader.xml
+9:43:44   [Munge]	Munging sprite_shader.xml
+9:43:44   [Munge]	Munging stencilshadow_shader.xml
+9:43:44   [Munge]	Munging terrain_shader.xml
+9:43:44   [Munge]	Munging terrain_shader2.xml
+9:43:44   [Munge]	Munging water_shader.xml
+9:43:44   [Munge]	Munging zprepass_shader.xml
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\English.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\French.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\german.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\Italian.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\spanish.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\PC\uk_english.cfg...
+9:43:44   [Munge]	Merging ..\..\Common\Localize\Comments.cfg...
+9:43:45   [Munge]	Merging ..\..\Common\Localize\english.cfg...
+9:43:45   [Munge]	Merging ..\..\Common\Localize\french.cfg...
+9:43:45   [Munge]	Merging ..\..\Common\Localize\german.cfg...
+9:43:45   [Munge]	Merging ..\..\Common\Localize\italian.cfg...
+9:43:45   [Munge]	Merging ..\..\Common\Localize\spanish.cfg...
+9:43:46   [Munge]	Merging ..\..\Common\Localize\uk_english.cfg...
+9:43:46   [Munge]	
+9:43:46   [Munge]	Munging Comments.cfg
+9:43:46   [Munge]	Munging English.cfg
+9:43:46   [Munge]	Munging French.cfg
+9:43:46   [Munge]	Munging german.cfg
+9:43:46   [Munge]	Munging Italian.cfg
+9:43:46   [Munge]	Munging spanish.cfg
+9:43:46   [Munge]	Munging uk_english.cfg
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile core.req -writefiles MUNGED\PC\core.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	Munging core.req
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile common.req -writefiles MUNGED\PC\common.files -common MUNGED\PC\core.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile ingame.req -writefiles MUNGED\PC\ingame.files -common MUNGED\PC\core.files MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile inshell.req -writefiles MUNGED\PC\inshell.files -common MUNGED\PC\core.files MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile MISSION\*.req -common MUNGED\PC\core.files MUNGED\PC\common.files MUNGED\PC\ingame.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile MISSION.req -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:43:46   [Munge]	Munging mission.req
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Info]	File done
+9:43:46   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\core.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\core.lvl"
+9:43:46   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\common.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\common.lvl"
+9:43:46   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\ingame.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\ingame.lvl"
+9:43:46   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\MISSION.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\MISSION.lvl"
+9:43:46   [Info]	Executing file: "E:\BF2_Modtools\data_POC\addme\mungeAddme.bat"
+9:43:46   
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\addme>md munged 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\addme>..\..\ToolsFL\bin\scriptmunge -sourcedir . -platform xbox -inputfile addme.lua -outputdir munged\ -checkdate -continue 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\addme>copy munged\addme.script ..\_LVL_XBOX\ 
+9:43:46   [Munge]	        0 Datei(en) kopiert.
+9:43:46   [Munge]	
+9:43:46   [Info]	File done
+9:43:46   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\addme\munged\addme.script" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\addme.script"
+9:43:46   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Shell\munge.bat"
+9:43:46   
+9:43:46   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Shell\..\..\..\ToolsFL\Bin
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>configmunge -inputfile *.mcfg -checkdate -continue -platform PC -sourcedir  ..\..\Shell\movies -outputdir MUNGED\PC -hashstrings  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>for %A in (..\..\Shell\movies\PC\*.mlst) do moviemunge -input %A -output ..\..\_LVL_PC\Movies\%~nA.mvs -checkdate  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>configmunge -inputfile effects\*.fx -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>scriptmunge -inputfile scripts\*.lua -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>PC_texturemunge -inputfile $*.tga -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>fontmunge -inputfile fonts\*.fff -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>PC_modelmunge -inputfile $*.msh -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>if /I "PC" == "PS2" binmunge -inputfile ps2bin\*.ps2bin -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>levelpack -inputfile shell.req -common ..\Common\MUNGED\PC\core.files ..\Common\MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Shell -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>if /I "PC" == "PS2" levelpack -inputfile shellps2.req -common ..\Common\MUNGED\PC\core.files ..\Common\MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Shell -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:43:46   [Munge]	
+9:43:46   [Info]	File done
+9:43:46   [Error]	Source file does not exist at path: "E:\BF2_Modtools\data_POC\_LVL_PC\Shell\shell.lvl"
+9:43:46   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Worlds\TAT\munge.bat"
+9:43:46   
+9:43:46   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Worlds\Common\..\..\..\..\ToolsFL\Bin
+9:43:46   [Munge]	Done
+9:43:46   [Munge]	Done
+9:43:46   [Munge]	Done
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	        1 Datei(en) verschoben.
+9:43:46   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Worlds\TAT\..\..\..\..\ToolsFL\Bin
+9:43:46   [Munge]	0 Datei(en) kopiert
+9:43:46   [Munge]	Done
+9:43:47   [Munge]	Done
+9:43:47   [Munge]	Done
+9:43:47   [Munge]	Munging tat2.pth
+9:43:47   [Munge]	Munging tat2_1flag.PTH
+9:43:47   [Munge]	Munging tat2_collision.pth
+9:43:47   [Munge]	Munging tat2_con.PTH
+9:43:47   [Munge]	Munging tat2_CTF.PTH
+9:43:47   [Munge]	Munging tat2_design.pth
+9:43:47   [Munge]	Munging tat2_hunt.PTH
+9:43:47   [Munge]	Munging tat2_soundregions.pth
+9:43:47   [Munge]	Munging tat2_tdm.PTH
+9:43:47   [Munge]	Munging tat2_turrets.PTH
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	Munging tat2.req
+9:43:47   [Munge]	        0 Datei(en) verschoben.
+9:43:47   [Munge]	Munging tat2.req
+9:43:47   [Munge]	        0 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	        1 Datei(en) verschoben.
+9:43:47   [Munge]	
+9:43:47   [Info]	File done
+9:43:47   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\TAT\tat2.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\POC\tat2.lvl"
+9:43:47   
+9:43:47   **************************************************************
+9:43:47   ******** FINISHED JOB
+9:43:47   **************************************************************
+9:44:39   
+9:44:39   **************************************************************
+9:44:39   ******** STARTED JOB
+9:44:39   **************************************************************
+9:44:39   
+9:44:39   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Common\munge.bat"
+9:44:39   
+9:44:39   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Common\..\..\..\ToolsFL\Bin
+9:44:39   [Munge]	Copying premunged files from MUNGED...
+9:44:39   [Munge]	0 Datei(en) kopiert
+9:44:39   [Munge]	Copying premunged files from MUNGED\PC...
+9:44:39   [Munge]	Done
+9:44:39   [Munge]	        1 Datei(en) verschoben.
+9:44:39   [Munge]	        1 Datei(en) verschoben.
+9:44:39   [Munge]	Munging zzz_customize.lua
+9:44:39   [Munge]	        1 Datei(en) verschoben.
+9:44:39   [Munge]	        1 Datei(en) verschoben.
+9:44:39   [Munge]	        1 Datei(en) verschoben.
+9:44:39   [Munge]	Munging bump_shader.xml
+9:44:40   [Munge]	Munging decal_shader.xml
+9:44:40   [Munge]	Munging detail_shader.xml
+9:44:40   [Munge]	Munging filtercopy_shader.xml
+9:44:40   [Munge]	Munging flare_shader.xml
+9:44:40   [Munge]	Munging foliage_shader.xml
+9:44:40   [Munge]	Munging hdr_shader.xml
+9:44:40   [Munge]	Munging interface_shader.xml
+9:44:40   [Munge]	Munging lightbeam_shader.xml
+9:44:40   [Munge]	Munging normalmapadder_shader.xml
+9:44:40   [Munge]	Munging normal_shader.xml
+9:44:41   [Munge]	Munging normal_terrain_shader.xml
+9:44:41   [Munge]	Munging ocean_shader.xml
+9:44:41   [Munge]	Munging particle_shader.xml
+9:44:41   [Munge]	Munging perpixeldiffuselighting_shader.xml
+9:44:41   [Munge]	Munging pervertexdiffuselighting_shader.xml
+9:44:41   [Munge]	Munging prereflection_shader.xml
+9:44:41   [Munge]	Munging rain_shader.xml
+9:44:41   [Munge]	Munging refraction_shader.xml
+9:44:41   [Munge]	Munging sample_shader.xml
+9:44:41   [Munge]	Munging scroll_shader.xml
+9:44:41   [Munge]	Munging shadowquad_shader.xml
+9:44:42   [Munge]	Munging shield_shader.xml
+9:44:42   [Munge]	Munging skyfog_shader.xml
+9:44:42   [Munge]	Munging specularlighting_shader.xml
+9:44:42   [Munge]	Munging specular_shader.xml
+9:44:42   [Munge]	Munging sprite_shader.xml
+9:44:42   [Munge]	Munging stencilshadow_shader.xml
+9:44:42   [Munge]	Munging terrain_shader.xml
+9:44:42   [Munge]	Munging terrain_shader2.xml
+9:44:42   [Munge]	Munging water_shader.xml
+9:44:42   [Munge]	Munging zprepass_shader.xml
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\English.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\French.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\german.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\Italian.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\spanish.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\PC\uk_english.cfg...
+9:44:42   [Munge]	Merging ..\..\Common\Localize\Comments.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\english.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\french.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\german.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\italian.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\spanish.cfg...
+9:44:43   [Munge]	Merging ..\..\Common\Localize\uk_english.cfg...
+9:44:44   [Munge]	
+9:44:44   [Munge]	Munging Comments.cfg
+9:44:44   [Munge]	Munging English.cfg
+9:44:44   [Munge]	Munging French.cfg
+9:44:44   [Munge]	Munging german.cfg
+9:44:44   [Munge]	Munging Italian.cfg
+9:44:44   [Munge]	Munging spanish.cfg
+9:44:44   [Munge]	Munging uk_english.cfg
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile core.req -writefiles MUNGED\PC\core.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	Munging core.req
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile common.req -writefiles MUNGED\PC\common.files -common MUNGED\PC\core.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile ingame.req -writefiles MUNGED\PC\ingame.files -common MUNGED\PC\core.files MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile inshell.req -writefiles MUNGED\PC\inshell.files -common MUNGED\PC\core.files MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile MISSION\*.req -common MUNGED\PC\core.files MUNGED\PC\common.files MUNGED\PC\ingame.files -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Common>levelpack -inputfile MISSION.req -checkdate -continue -platform PC -sourcedir  ..\..\Common -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Common\PC_MungeLog.txt" 
+9:44:44   [Munge]	Munging mission.req
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Info]	File done
+9:44:44   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\core.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\core.lvl"
+9:44:44   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\common.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\common.lvl"
+9:44:44   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\ingame.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\ingame.lvl"
+9:44:44   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\MISSION.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\MISSION.lvl"
+9:44:44   [Info]	Executing file: "E:\BF2_Modtools\data_POC\addme\mungeAddme.bat"
+9:44:44   
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\addme>md munged 
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\addme>..\..\ToolsFL\bin\scriptmunge -sourcedir . -platform xbox -inputfile addme.lua -outputdir munged\ -checkdate -continue 
+9:44:44   [Munge]	
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\addme>copy munged\addme.script ..\_LVL_XBOX\ 
+9:44:44   [Munge]	        0 Datei(en) kopiert.
+9:44:44   [Munge]	
+9:44:44   [Info]	File done
+9:44:44   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\addme\munged\addme.script" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\addme.script"
+9:44:44   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Shell\munge.bat"
+9:44:44   
+9:44:44   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Shell\..\..\..\ToolsFL\Bin
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>configmunge -inputfile *.mcfg -checkdate -continue -platform PC -sourcedir  ..\..\Shell\movies -outputdir MUNGED\PC -hashstrings  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>for %A in (..\..\Shell\movies\PC\*.mlst) do moviemunge -input %A -output ..\..\_LVL_PC\Movies\%~nA.mvs -checkdate  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>configmunge -inputfile effects\*.fx -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>scriptmunge -inputfile scripts\*.lua -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>PC_texturemunge -inputfile $*.tga -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>fontmunge -inputfile fonts\*.fff -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>PC_modelmunge -inputfile $*.msh -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>if /I "PC" == "PS2" binmunge -inputfile ps2bin\*.ps2bin -checkdate -continue -platform PC -sourcedir  ..\..\Shell -outputdir MUNGED\PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>levelpack -inputfile shell.req -common ..\Common\MUNGED\PC\core.files ..\Common\MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Shell -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Munge]	E:\BF2_Modtools\data_POC\_BUILD\Shell>if /I "PC" == "PS2" levelpack -inputfile shellps2.req -common ..\Common\MUNGED\PC\core.files ..\Common\MUNGED\PC\common.files -checkdate -continue -platform PC -sourcedir  ..\..\Shell -inputdir MUNGED\PC -outputdir ..\..\_LVL_PC  2>>"E:\BF2_Modtools\data_POC\_BUILD\Shell\PC_MungeLog.txt" 
+9:44:44   [Munge]	
+9:44:44   [Error]	Source file does not exist at path: "E:\BF2_Modtools\data_POC\_LVL_PC\Shell\shell.lvl"
+9:44:44   [Info]	File done
+9:44:44   [Info]	Executing file: "E:\BF2_Modtools\data_POC\_BUILD\Worlds\TAT\munge.bat"
+9:44:44   
+9:44:44   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Worlds\Common\..\..\..\..\ToolsFL\Bin
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	        1 Datei(en) verschoben.
+9:44:44   [Munge]	MUNGE_BIN_DIR=E:\BF2_Modtools\data_POC\_BUILD\Worlds\TAT\..\..\..\..\ToolsFL\Bin
+9:44:44   [Munge]	0 Datei(en) kopiert
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	Done
+9:44:44   [Munge]	Munging tat2.pth
+9:44:45   [Munge]	Munging tat2_1flag.PTH
+9:44:45   [Munge]	Munging tat2_collision.pth
+9:44:45   [Munge]	Munging tat2_con.PTH
+9:44:45   [Munge]	Munging tat2_CTF.PTH
+9:44:45   [Munge]	Munging tat2_design.pth
+9:44:45   [Munge]	Munging tat2_hunt.PTH
+9:44:45   [Munge]	Munging tat2_soundregions.pth
+9:44:45   [Munge]	Munging tat2_tdm.PTH
+9:44:45   [Munge]	Munging tat2_turrets.PTH
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	Munging tat2.req
+9:44:45   [Munge]	        0 Datei(en) verschoben.
+9:44:45   [Munge]	Munging tat2.req
+9:44:45   [Munge]	        0 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	        1 Datei(en) verschoben.
+9:44:45   [Munge]	
+9:44:45   [Info]	File done
+9:44:45   [Info]	Successfully copied "E:\BF2_Modtools\data_POC\_LVL_PC\TAT\tat2.lvl" to "D:\SteamLibrary\steamapps\common\Star Wars Battlefront II Classic\GameData\addon\POC\data\_LVL_PC\POC\tat2.lvl"
+9:44:45   
+9:44:45   **************************************************************
+9:44:45   ******** FINISHED JOB
+9:44:45   **************************************************************

@@ -2,7 +2,7 @@
 --Script written by S1thK3nny
 --Work it harder, make it better, do it faster, makes us stronger
 
---TODO: Figure out a way to make SetupTeams not as dumb as it is right now, it has to be more flexible
+--TODO: Figure out a way to make SetupTeams not as dumb as it is right now, it has to be more flexible + possibly make SetupMap() like loadUnits for example
 
 
 print("POC Customization loading...")
@@ -19,7 +19,6 @@ local cishero = nil
 
 
 function SetupCustomizedMatch()
-
     randomizeSides()
     loadUnits(rema_database.data.legion, republic_units, repunit)
     loadUnits(1, separatist_units, cisunit) --ergh...yeah considering there isn't even a dropdown for this, let's go with 1
@@ -56,13 +55,13 @@ end
 
 function randomizeSides()
     if(rema_database.data.randomLegion ~= nil and rema_database.data.randomLegion == true) then
-        rema_database.data.legion = math.random(1, 8) --Rema database is failing here, update when adding entries!
+        rema_database.data.legion = math.random(1, table.getn(republic_units))
     end
     if(rema_database.data.randomSP ~= nil and rema_database.data.randomSP == true) then
-        rema_database.data.extraUnit = math.random(1, 10) --Rema database is failing here, update when adding entries!
+        rema_database.data.extraUnit = math.random(1, table.getn(special)+1) --+1 due to it missing the id = 1
     end
     if(rema_database.data.randomHeroes ~= nil and rema_database.data.randomHeroes == true) then
-        rema_database.data.chosenHero = math.random(1, 6) --Rema database is failing here, update when adding entries!
+        rema_database.data.chosenHero = math.random(1, table.getn(republic_heroes))
     end
 end
 
