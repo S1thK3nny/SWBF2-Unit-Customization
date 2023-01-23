@@ -2,6 +2,8 @@
 --Script written by S1thK3nny
 --Work it harder, make it better, do it faster, makes us stronger
 
+--TODO: Figure out a way to make SetupTeams not as dumb as it is right now, it has to be more flexible
+
 
 print("POC Customization loading...")
 
