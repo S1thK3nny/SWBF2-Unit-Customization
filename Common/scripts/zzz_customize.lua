@@ -1,28 +1,30 @@
+--STAR WARS BATTLEFRONT II - CUSTOMIZATION
+--Script written by S1thK3nny
+--Work it harder, make it better, do it faster, makes us stronger
+
+
 print("POC Customization loading...")
 
 
 --Incase some values were saved. Well, now they're not!
 local repunit = {}
 local specialoperations = nil
+local rephero = nil
 
-local cisunit1 = nil
-local cisunit2 = nil
-local cisunit3 = nil
-local cisunit4 = nil
-local cisunit5 = nil
-local cisunit6 = nil
-local cisunit7 = nil
-local cisunit8 = nil
---local cisunit9 = nil
+local cisunit = {}
+local cishero = nil
 
 
 
 function SetupCustomizedMatch()
+
     randomizeSides()
-    loadUnits(rema_database.data.legion)
-    loadCIS()
+    loadUnits(rema_database.data.legion, republic_units, repunit)
+    loadUnits(1, separatist_units, cisunit) --ergh...yeah considering there isn't even a dropdown for this, let's go with 1
     loadSpecial(rema_database.data.extraUnit)
-    loadHeroes(rema_database.data.chosenHero)
+    rephero = loadHeroes(rema_database.data.chosenHero, republic_heroes)
+    cishero = loadHeroes(1, separatist_heroes)
+
     if(repunit[9] ~= nil) then
         NewSetupTeams(4)
         print("POC: RepUnit9 is not nil!")
@@ -62,46 +64,7 @@ function randomizeSides()
     end
 end
 
-
-
-function loadCIS()
-
-    ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\separatist_alliance.lvl",
-        "cis_inf_b1_battle_droid",
-        "cis_inf_security_b1_battle_droid",
-        "cis_inf_b1_battle_droid_sniper",
-        "cis_inf_b1_battle_droid_engineer",
-        "cis_inf_b2_super_battle_droid",
-        "cis_inf_b2_super_battle_droid_commander",
-        "cis_inf_droideka",
-        "cis_inf_oom_command_battle_droid",
-        "cis_inf_ig-100_magnaguard",
-        "cis_inf_count_dooku")
-
-    if(rema_database.data.phase1) then
-        ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\separatist_alliance.lvl",
-        "cis_inf_ig-100_magnaguard_season1")
-        cisunit7 = "cis_inf_ig-100_magnaguard_season1"
-    else 
-        ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\separatist_alliance.lvl",
-        "cis_inf_ig-100_magnaguard")
-        cisunit7 = "cis_inf_ig-100_magnaguard"
-    end
-
-        cisunit1 = "cis_inf_b1_battle_droid"
-        cisunit2 = "cis_inf_security_b1_battle_droid"
-        cisunit3 = "cis_inf_b1_battle_droid_sniper"
-        cisunit4 = "cis_inf_b1_battle_droid_engineer"
-        cisunit5 = "cis_inf_b2_super_battle_droid"
-        cisunit6 = "cis_inf_droideka"
-        cisunit8 = "cis_inf_oom_command_battle_droid"
-        cishero = "cis_inf_count_dooku"
-
-        ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SOUND\\DOK.lvl;DOKcw")
-
-end
-
-units = {
+republic_units = {
     {id = 1, units = {
         "rep_inf_clone_trooper",
         "rep_inf_clone_marine",
@@ -112,7 +75,7 @@ units = {
         "rep_inf_clone_jettrooper",
         "rep_inf_commander_vain",
         
-    }, side = "galactic_republic.lvl", size = 8},
+    }, side = "galactic_republic.lvl"},
 
     {id = 2, units = {
         "rep_inf_501st_legion_clone_trooper",
@@ -123,7 +86,7 @@ units = {
         "rep_inf_501st_legion_clone_gunner",
         "rep_inf_501st_legion_jet_trooper",
         "rep_inf_arc_trooper_fives",
-    }, side = "galactic_republic.lvl", size = 8,
+    }, side = "galactic_republic.lvl",
     phase1variant = {
         "rep_inf_501st_legion_clone_trooper_phase1",
         "rep_inf_501st_legion_clone_rocketeer_phase1",
@@ -142,7 +105,7 @@ units = {
         "rep_inf_212th_medic",
         "rep_inf_212th_gunner",
         "rep_inf_212th_jet_trooper",
-    }, side = "rep_uta.lvl", size = 7},
+    }, side = "rep_uta.lvl"},
 
     {id = 4, units = {
         "rep_inf_104th_battalion_wolfpack_trooper",
@@ -153,7 +116,7 @@ units = {
         "rep_inf_104th_battalion_wolfpack_gunner",
         "rep_inf_104th_battalion_wolfpack_jet_trooper",
         "rep_inf_commander_wolffe",
-    }, side = "galactic_republic.lvl", size = 8},
+    }, side = "galactic_republic.lvl"},
 
     {id = 5, units = {
         "rep_inf_5th_trooper",
@@ -163,7 +126,7 @@ units = {
         "rep_inf_5th_gunner",
         "rep_inf_5th_commander",
         "rep_inf_5th_commando",
-    }, side = "galactic_republic.lvl", size = 7},
+    }, side = "galactic_republic.lvl"},
 
     {id = 6, units = {
         "rep_inf_coruscant_guard_shock_trooper",
@@ -174,7 +137,7 @@ units = {
         "rep_inf_senate_commando_captain",
         "rep_inf_coruscant_guard_riot_trooper",
         "rep_inf_commander_thorn",
-    }, side = "galactic_republic.lvl", size = 8,
+    }, side = "galactic_republic.lvl",
     phase1variant = {
         "rep_inf_coruscant_guard_shock_trooper_phase1",
         "rep_inf_coruscant_guard_shock_rocketeer_phase1",
@@ -193,7 +156,7 @@ units = {
         "rep_inf_galactic_marine_engineer",
         "rep_inf_galactic_marine_gunner",
         "rep_inf_Commander_Bacara",
-    }, side = "galactic_republic.lvl", size = 6},
+    }, side = "galactic_republic.lvl"},
 
     {id = 8, units = {
         "rep_inf_galactic_marine_kellers_unit_backpackless",
@@ -202,24 +165,51 @@ units = {
         "rep_inf_galactic_marine_kellers_unit_engineer",
         "rep_inf_galactic_marine_kellers_unit_gunner",
         "rep_inf_commander_keller",
-    }, side = "galactic_republic.lvl",size = 6},
+    }, side = "galactic_republic.lvl"},
 }
 
-function loadUnits(id)
+separatist_units = {
+    {id = 1, units = {
+        "cis_inf_b1_battle_droid",
+        "cis_inf_security_b1_battle_droid",
+        "cis_inf_b1_battle_droid_sniper",
+        "cis_inf_b1_battle_droid_engineer",
+        "cis_inf_b2_super_battle_droid",
+        "cis_inf_b2_super_battle_droid_commander",
+        "cis_inf_droideka",
+        "cis_inf_oom_command_battle_droid",
+        "cis_inf_ig-100_magnaguard",
+        "cis_inf_count_dooku",
+    }, side = "separatist_alliance.lvl",
+    phase1variant = {
+        "cis_inf_b1_battle_droid",
+        "cis_inf_security_b1_battle_droid",
+        "cis_inf_b1_battle_droid_sniper",
+        "cis_inf_b1_battle_droid_engineer",
+        "cis_inf_b2_super_battle_droid",
+        "cis_inf_b2_super_battle_droid_commander",
+        "cis_inf_droideka",
+        "cis_inf_oom_command_battle_droid",
+        "cis_inf_ig-100_magnaguard_season1",
+        "cis_inf_count_dooku",
+    }},
+}
+
+function loadUnits(id, unittable, sidetable) --rema id from the IF, table to be loaded, rep or cis
     if id == nil then id = 1 end
-    for i, unit in ipairs(units) do
+    for i, unit in ipairs(unittable) do
         if unit.id == id then
             print("POC Customization: ID is ", id)
             if(rema_database.data.phase1 and unit.phase1variant~=nil) then
                 ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. unit.side, unpack(unit.phase1variant))
-                for i = 1, unit.size do
-                    repunit[i] = unit.phase1variant[i]
+                for i = 1, table.getn(unit.phase1variant) do
+                    sidetable[i] = unit.phase1variant[i]
                 end
                 break
             else
                 ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. unit.side, unpack(unit.units))
-                for i = 1, unit.size do
-                    repunit[i] = unit.units[i]
+                for i = 1, table.getn(unit.units) do
+                    sidetable[i] = unit.units[i]
                 end
                 break
             end
@@ -249,9 +239,9 @@ function loadSpecial(id)
         for i, unit in ipairs(special) do
             if unit.id == id then
                 print("POC Customization: Enforcer ID is ", id)
-                ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. unit.side, unit.unit)
-                specialoperations = unit.unit
-                if(unit.side == "bad_batch.lvl") then -- Bad Batch units rely on them cause lazy
+                --UNDER ALL CIRCUMSTANCES; LOAD BEFORE THE BAD BATCH UNIT LOADS;
+                if(unit.side == "bad_batch.lvl") then
+                    print("TEST")
                     ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\galactic_republic.lvl",
                     "rep_inf_scorch",
                     "rep_inf_sev",
@@ -259,6 +249,8 @@ function loadSpecial(id)
                     "rep_inf_boss",
                     "rep_inf_captain_rex")
                 end
+                ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. unit.side, unit.unit)
+                specialoperations = unit.unit
                 break
             end
         end
@@ -267,7 +259,7 @@ end
 
 
 
-heroes = {
+republic_heroes = {
     {id = 1, unit = "rep_inf_anakin_skywalker", side = "galactic_republic.lvl", sound = "ANI.lvl;ANIcw", phase1variant = "rep_inf_anakin_skywalker_season1"},
     {id = 2, unit = "rep_hero_obiwan", side = "rep_uta.lvl"},
     {id = 3, unit = "rep_inf_plo_koon", side = "galactic_republic.lvl", sound = "PLO.lvl;PLOcw"},
@@ -276,7 +268,12 @@ heroes = {
     {id = 6, unit = "rep_inf_mace_windu", side = "galactic_republic.lvl"},
 }
 
-function loadHeroes(id)
+separatist_heroes = {
+    {id = 1, unit = "cis_inf_count_dooku", side = "separatist_alliance.lvl", sound = "DOK.lvl;DOKcw"},
+}
+
+--For whatever reason, I can't do what I did with the table like in loadUnits here with the rephero and cishero variables. Returning instead.
+function loadHeroes(id, heroes) --rema id from the IF, table with units
     if id == nil then id = 1 end
     for i, hero in ipairs(heroes) do
         if hero.id == id then
@@ -284,10 +281,10 @@ function loadHeroes(id)
             print("POC Customization: Hero ID is ", id)
             if(rema_database.data.phase1 and hero.phase1variant~=nil) then
                 ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. hero.side, hero.phase1variant)
-                rephero = hero.phase1variant
+                return hero.phase1variant
             else
                 ReadDataFile("..\\..\\addon\\995\\data\\_LVL_PC\\SIDE\\" .. hero.side, hero.unit)
-                rephero = hero.unit
+                return hero.unit
             end
 
             if(hero.sound~=nil) then
@@ -330,14 +327,14 @@ function NewSetupTeams(id, idSP) --id == how many extra units you want to add to
             team = CIS,
             units = 32,
             reinforcements = 300,
-            soldier = {cisunit1,10, 10},
-            assault = {cisunit2,6, 6},
-            sniper = {cisunit3,4, 4}, 
-            engineer = {cisunit4,4, 4},
-            officer = {cisunit5,3, 3},
-            special = {cisunit6,2, 2},
-            extra1 = {cisunit7,2, 2},
-            extra2 = {cisunit8,1,1},
+            soldier = {cisunit[1],10, 10},
+            assault = {cisunit[2],6, 6},
+            sniper = {cisunit[3],4, 4}, 
+            engineer = {cisunit[4],4, 4},
+            officer = {cisunit[5],3, 3},
+            special = {cisunit[6],2, 2},
+            extra1 = {cisunit[7],2, 2},
+            extra2 = {cisunit[8],1,1},
         }
     }
     if(id == 1) then
