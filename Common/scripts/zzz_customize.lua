@@ -25,20 +25,7 @@ function SetupCustomizedMatch()
     loadSpecial(rema_database.data.extraUnit)
     rephero = loadHeroes(rema_database.data.chosenHero, republic_heroes)
     cishero = loadHeroes(1, separatist_heroes)
-
-    if(repunit[9] ~= nil) then
-        NewSetupTeams(4)
-        print("POC: RepUnit9 is not nil!")
-    elseif(repunit[8] ~= nil) then
-        NewSetupTeams(3)
-        print("POC: RepUnit8 is not nil!")
-    elseif(repunit[7] ~= nil) then
-        NewSetupTeams(2)
-        print("POC: RepUnit7 is not nil!")
-    else
-        NewSetupTeams(1)
-        print("POC: Loading default roster!")
-    end
+    NewSetupTeams()
 end
 
 
@@ -180,7 +167,6 @@ separatist_units = {
         "cis_inf_droideka",
         "cis_inf_oom_command_battle_droid",
         "cis_inf_ig-100_magnaguard",
-        "cis_inf_count_dooku",
     }, side = "separatist_alliance.lvl",
     phase1variant = {
         "cis_inf_b1_battle_droid",
@@ -192,7 +178,6 @@ separatist_units = {
         "cis_inf_droideka",
         "cis_inf_oom_command_battle_droid",
         "cis_inf_ig-100_magnaguard_season1",
-        "cis_inf_count_dooku",
     }},
 }
 
@@ -310,7 +295,7 @@ end
 
 
 
-function NewSetupTeams(id, idSP) --id == how many extra units you want to add to the base roster. 1 is none, 2 is 1, 3 is 2 and 4 is 3. This is why shit starts at 0, dear lua
+function NewSetupTeams() --id == how many extra units you want to add to the base roster. 1 is none, 2 is 1, 3 is 2 and 4 is 3. This is why shit starts at 0, dear lua
     local Teams = {
         rep = {
             team = REP,
@@ -334,22 +319,25 @@ function NewSetupTeams(id, idSP) --id == how many extra units you want to add to
             engineer = {cisunit[4],4, 4},
             officer = {cisunit[5],3, 3},
             special = {cisunit[6],2, 2},
-            extra1 = {cisunit[7],2, 2},
-            extra2 = {cisunit[8],1,1},
         }
     }
-    if(id == 1) then
-        print("POC: No extra units!")
-    elseif(id == 2) then
-        Teams.rep.extra1 = {repunit[7],2,2}
-    elseif(id == 3) then
-        Teams.rep.extra1 = {repunit[7],2,2}
-        Teams.rep.extra2 = {repunit[8],1,1}
-    elseif(id == 4) then
-        Teams.rep.extra1 = {repunit[7],2,2}
-        Teams.rep.extra2 = {repunit[8],1,1}
-        Teams.rep.extra3 = {repunit[9],1,1}
+
+    if(table.getn(repunit)>6) then
+        for i = 1, table.getn(repunit) - 6 do
+            local extra = "extra"..i
+            Teams.rep[extra] = {repunit[i+6],2,2}
+            print("POC: Adding ", repunit[i+6])
+        end
     end
+
+    if(table.getn(cisunit)>6) then
+        for i = 1, table.getn(cisunit) - 6 do
+            local extra = "extra"..i
+            Teams.cis[extra] = {cisunit[i+6],2,2}
+            print("POC: Adding ", cisunit[i+6])
+        end
+    end
+
     if (specialoperations~=nil) then
         Teams.rep.specialoperations = {specialoperations,1,1} --Add the unit to the table
     end 
