@@ -1,1 +1,0 @@
-@call clean.bat /platform pc %*

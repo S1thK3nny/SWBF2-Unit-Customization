@@ -1,9 +1,0 @@
-[GameObjectClass]		
-
-ClassLabel		=	"prop"
-GeometryName	=	"tat3_prop_maxrebo_organ.msh"
-
-
-[Properties]		
-
-GeometryName	=	"tat3_prop_maxrebo_organ"

@@ -1,1 +1,0 @@
-@call ..\munge_side.bat IMP %1

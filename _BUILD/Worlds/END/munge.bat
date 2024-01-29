@@ -1,1 +1,0 @@
-@call ..\munge_world.bat END %1

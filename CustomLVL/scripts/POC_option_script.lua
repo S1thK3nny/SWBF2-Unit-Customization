@@ -2,6 +2,8 @@
 --Script written by S1thK3nny
 --Remaster by GTanakin
 
+__scriptName__ = "[POC: POC_option_script]: "
+
 function swbf2Remaster_getCustomQuickSettings()
 	local customSettings = {
 	}
@@ -11,326 +13,104 @@ end
 -----------------------------------------------------------------------------------------------------------
 -- Custom Minipage
 
---"this" refers to the minipage, remember that
+-- "this" refers to the minipage, remember that
 
-function POC_minipage_updateDropdownList(this)
-
-	local dest = this.minipage.mySection.dropdownLegions --Dest is the dropdownLegions
-	local dropDownLegionStringList = { --The strings for the dropdown
-		"Normal",
-		"501st Legion",
-		"212th Battalion",
-		"104th Battalion",
-		"5th Fleet Security",
-		"Shock Troopers",
-		"Galactic Marines",
-		"Galactic Marines (Kellers Unit)",
-	}
-	dropDownLegionStringListLength = table.getn(dropDownLegionStringList)
-
-	local destExtra = this.minipage.mySection.dropdownExtra
-	local dropDownExtraStringList = {
-		"None",
-		"RC-1138 'Boss'",
-		"RC-1140 'Fixer'",
-		"RC-1207 'Sev'",
-		"RC-1262 'Scorch'",
-		"CC-5576 'Gregor'",
-		"Clone Force 99 - Crosshair",
-		"Clone Force 99 - Hunter",
-		"Clone Force 99 - Tech",
-		"Clone Force 99 - Wrecker",
-	}
-	dropDownExtraStringListLength = table.getn(dropDownExtraStringList)
-
-	local destHeroes = this.minipage.mySection.dropdownHeroes
-	local dropDownHeroesStringList = {
-		"Anakin Skywalker",
-		"Obi-Wan Kenobi",
-		"Plo Koon",
-		"Grand Master Yoda",
-		"Ahsoka Tano",
-		"Mace Windu",
-	}
-	dropDownHeroesStringListLength = table.getn(dropDownHeroesStringList)
-
-	local destMapCycle = this.minipage.mySection.dropdownMapCycle
-	local dropDownMapCycleStringList = {
-		"Day time",
-		"Night time"
-	}
-	dropDownMapCycleStringListLength = table.getn(dropDownMapCycleStringList)
-
-	--READ! When adding a new dropdown, add it to this table!
-	destDropdown = {
-		dest,
-		destExtra,
-		destHeroes,
-		destMapCycle
-	}
-
-
-
-	if dest.expanded == true then
-		IFObj_fnSetVis(dest.listbox, true)
-		ListManager_fnAutoscroll(dest.listbox, dropDownLegionStringList, POC_minipag_dropdown_layout.lst)
-		POC_minipage_dropDownCloseOthers(this, dest)
-		--------------------------------------------------------
-	else
-		IFObj_fnSetVis(dest.listbox, false)
-		local selectedString = dropDownLegionStringList[rema_database.data.legion]
-		RoundIFButtonLabel_fnSetString(dest.button, selectedString)
-	end
-
-
-	if destExtra.expanded == true then
-		IFObj_fnSetVis(destExtra.listbox, true)
-		ListManager_fnAutoscroll(destExtra.listbox, dropDownExtraStringList, POC_minipag_dropdown_extra_layout.lst)
-		POC_minipage_dropDownCloseOthers(this, destExtra)
-		--------------------------------------------------------
-	else
-		IFObj_fnSetVis(destExtra.listbox, false)
-		local selectedStringExtra = dropDownExtraStringList[rema_database.data.extraUnit]
-		RoundIFButtonLabel_fnSetString(destExtra.button, selectedStringExtra)
-	end
-
-
-	if destHeroes.expanded == true then
-		IFObj_fnSetVis(destHeroes.listbox, true)
-		ListManager_fnAutoscroll(destHeroes.listbox, dropDownHeroesStringList, POC_minipag_dropdown_heroes_layout.lst)
-		POC_minipage_dropDownCloseOthers(this, destHeroes)
-		--------------------------------------------------------
-	else
-		IFObj_fnSetVis(destHeroes.listbox, false)
-		local selectedStringHeroes = dropDownHeroesStringList[rema_database.data.chosenHero]
-		RoundIFButtonLabel_fnSetString(destHeroes.button, selectedStringHeroes)
-	end
-
-	if destMapCycle.expanded == true then
-		IFObj_fnSetVis(destMapCycle.listbox, true)
-		ListManager_fnAutoscroll(destMapCycle.listbox, dropDownMapCycleStringList, POC_minipag_dropdown_mapCycle_layout.lst)
-		POC_minipage_dropDownCloseOthers(this, destMapCycle)
-		--------------------------------------------------------
-	else
-		IFObj_fnSetVis(destMapCycle.listbox, false)
-		local selectedStringMapCycle = dropDownMapCycleStringList[rema_database.data.chosenDayTime]
-		RoundIFButtonLabel_fnSetString(destMapCycle.button, selectedStringMapCycle)
-	end
-
-end
-
-
-
-function POC_minipage_dropDownCloseOthers(this, drop)
-	for key, value in pairs(destDropdown) do
-		--print(key, value.tag, drop.tag)
-		if (drop.tag ~= "_dropdown_" .. value.tag) then -- the "_dropdown_" is needed, otherwise the comparison will not work.
-			value.expanded = false
-		end
-	 end
-end
-
-
+local rema_database_dvalues = {
+    legion = 1,
+    extraUnit = 1,
+    chosenHero = 1,
+    chosenDayTime = 1,
+    phase1 = false,
+    randomLegion = false,
+    randomSP = false,
+    randomHeroes = false,
+    randomCycle = false
+}
 
 function POC_minipage_enter(this, bFwd)
 	
-	-- init default value if nothing is saved
-	-- remember this value will be available ingame
-	if rema_database.data.legion == nil then
-		rema_database.data.legion = 1
+	-- check if any of the rema_database values are nil. If so, set them to their default.
+	for k, v in pairs(rema_database_dvalues) do
+		if rema_database.data[k] == nil then
+			rema_database.data[k] = v
+		end
 	end
 
-	if rema_database.data.extraUnit == nil then
-		rema_database.data.extraUnit = 1
-	end
+	-- Used to simplify the TickBox ticking
+	tickBoxMapping = {
+		["yesPhase1"] = {tickBox = this.minipage.TickBoxContainer.phase1TickBoxContainer.phase1TickBox, dataField = "phase1"},
+		["yesRandomLegion"] = {tickBox = this.minipage.TickBoxContainer.randomizerContainer.randomLegionTickBox, dataField = "randomLegion"},
+		["yesRandomSP"] = {tickBox = this.minipage.TickBoxContainer.randomizerContainer.randomSPTickBox, dataField = "randomSP"},
+		["yesRandomHeroes"] = {tickBox = this.minipage.TickBoxContainer.randomizerContainer.randomHeroesTickBox, dataField = "randomHeroes"},
+		["yesRandomCycle"] = {tickBox = this.minipage.TickBoxContainer.randomizerContainer.randomCycleTickBox, dataField = "randomCycle"}
+	}
 
-	if rema_database.data.chosenHero == nil then
-		rema_database.data.chosenHero = 1
-	end
-
-	if rema_database.data.chosenDayTime == nil then
-		rema_database.data.chosenDayTime = 1
-	end
-
-	if rema_database.data.phase1 == nil then
-		rema_database.data.phase1 = false
-	end
-
-	if rema_database.data.randomLegion == nil then
-		rema_database.data.randomLegion = false
-	end
-
-	if rema_database.data.randomSP == nil then
-		rema_database.data.randomSP = false
-	end
-
-	if rema_database.data.randomHeroes == nil then
-		rema_database.data.randomHeroes = false
-	end
-
-	if rema_database.data.randomCycle == nil then
-		rema_database.data.randomCycle = false
-	end
+	dropdowns = {
+		{
+			dest = this.minipage.DropDownContainer.dropdownLegions,
+			stringList = {"Normal", "501st Legion", "212th Battalion", "104th Battalion", "5th Fleet Security", "Shock Troopers", "Galactic Marines", "Galactic Marines (Kellers Unit)"},
+			dataField = 'legion',
+			layout = POC_minipag_dropdown_layout
+		},
+		{
+			dest = this.minipage.DropDownContainer.dropdownExtra,
+			stringList = {"None", "RC-1138 'Boss'", "RC-1140 'Fixer'", "RC-1207 'Sev'", "RC-1262 'Scorch'", "CC-5576 'Gregor'", "Clone Force 99 - Crosshair", "Clone Force 99 - Hunter", "Clone Force 99 - Tech", "Clone Force 99 - Wrecker"},
+			dataField = 'extraUnit',
+			layout = POC_minipag_dropdown_extra_layout
+		},
+		{
+			dest = this.minipage.DropDownContainer.dropdownHeroes,
+			stringList = {"Anakin Skywalker", "Obi-Wan Kenobi", "Plo Koon", "Grand Master Yoda", "Ahsoka Tano", "Mace Windu"},
+			dataField = 'chosenHero',
+			layout = POC_minipag_dropdown_heroes_layout
+		},
+		{
+			dest = this.minipage.DropDownContainer.dropdownMapCycle,
+			stringList = {"Day time", "Night time"},
+			dataField = 'chosenDayTime',
+			layout = POC_minipag_dropdown_mapCycle_layout
+		}
+	}
 
 	-- let's fill our dropdown with data
-	POC_minipage_updateDropdownList(this)
+	updateDropdownList(this)
 end
 
 
 
 function POC_minipage_exit(this)
-	POC_printCurrentSettings()
+	printCurrentSettings()
 end
 
 
 
 function POC_handle_input(this)
-	
-	-- Dropdown list element hit
-	if gMouseListBox == this.minipage.mySection.dropdownLegions.listbox then
-		-- close dropdown
-		this.minipage.mySection.dropdownLegions.expanded = false
-		
-		local newIdx = gMouseListBox.Layout.CursorIdx
-		if newIdx and not (newIdx > dropDownLegionStringListLength) then
-			if newIdx ~= rema_database.data.legion then
-				rema_database.data.legion = newIdx
-			end
-		end
-		
-		POC_minipage_updateDropdownList(this)
-	end
 
-	if gMouseListBox == this.minipage.mySection.dropdownExtra.listbox then
-		this.minipage.mySection.dropdownExtra.expanded = false
-		
-		local newIdx = gMouseListBox.Layout.CursorIdx
-		if newIdx and not (newIdx > dropDownExtraStringListLength) then
-			if newIdx ~= rema_database.data.extraUnit then
-				rema_database.data.extraUnit = newIdx
-			end
-		end
-		
-		POC_minipage_updateDropdownList(this)
-	end
-
-	if gMouseListBox == this.minipage.mySection.dropdownHeroes.listbox then
-		this.minipage.mySection.dropdownHeroes.expanded = false
-		
-		local newIdx = gMouseListBox.Layout.CursorIdx
-		if newIdx and not (newIdx > dropDownHeroesStringListLength) then
-			if newIdx ~= rema_database.data.chosenHero then
-				rema_database.data.chosenHero = newIdx
-			end
-		end
-		
-		POC_minipage_updateDropdownList(this)
-	end
-
-	if gMouseListBox == this.minipage.mySection.dropdownMapCycle.listbox then
-		this.minipage.mySection.dropdownMapCycle.expanded = false
-		
-		local newIdx = gMouseListBox.Layout.CursorIdx
-		if newIdx and not (newIdx > dropDownMapCycleStringListLength) then
-			if newIdx ~= rema_database.data.chosenDayTime then
-				rema_database.data.chosenDayTime = newIdx
-			end
-		end
-		
-		POC_minipage_updateDropdownList(this)
-	end
+	for i, dropdown in ipairs(dropdowns) do
+		handleDropdownSelection(this, dropdown.dest, dropdown.dataField, table.getn(dropdown.stringList))
+	end	
 
 	-- default handle (listbox scrolls for example)
 	if gShellScreen_fnDefaultInputAccept(this, false) then
 		return
 	end
 
-	if(this.CurButton == "yesPhase1") then
-		if(rema_database.data.phase1) then
-			rema_database.data.phase1 = false
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.phase1TickBoxContainer.phase1TickBox,"check_no")
-		else
-			rema_database.data.phase1 = true
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.phase1TickBoxContainer.phase1TickBox,"check_yes")
+	-- tickBoxMapping table declared in POC_minipage_enter
+	if tickBoxMapping[this.CurButton] then
+		updateCheckboxData(tickBoxMapping[this.CurButton].tickBox, tickBoxMapping[this.CurButton].dataField)
+	elseif this.CurButton ~= nil then
+		-- Iterate over each dropdown to check which one got clicked, then open or close it
+		for _, dropdown in ipairs(dropdowns) do
+			if string.sub(this.CurButton, 13, string.len(this.CurButton)) == dropdown.layout.tag then
+				dropdown.dest.expanded = toggleDropdown(dropdown.dest.expanded, dropdown.layout, rema_database.data[dropdown.dataField])
+			end
 		end
-		ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-	elseif(this.CurButton == "yesRandomLegion") then
-		if(rema_database.data.randomLegion) then
-			rema_database.data.randomLegion = false
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomLegionTickBox,"check_no")
-		else
-			rema_database.data.randomLegion = true
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomLegionTickBox,"check_yes")
-		end
-		ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-	elseif(this.CurButton == "yesRandomSP") then
-		if(rema_database.data.randomSP) then
-			rema_database.data.randomSP = false
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomSPTickBox,"check_no")
-		else
-			rema_database.data.randomSP = true
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomSPTickBox,"check_yes")
-		end
-		ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-	elseif(this.CurButton == "yesRandomHeroes") then
-		if(rema_database.data.randomHeroes) then
-			rema_database.data.randomHeroes = false
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomHeroesTickBox,"check_no")
-		else
-			rema_database.data.randomHeroes = true
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomHeroesTickBox,"check_yes")
-		end
-		ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-	elseif(this.CurButton == "yesRandomCycle") then
-		if(rema_database.data.randomCycle) then
-			rema_database.data.randomCycle = false
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomCycleTickBox,"check_no")
-		else
-			rema_database.data.randomCycle = true
-			IFImage_fnSetTexture(this.minipage.TickBoxContainer.randomizerContainer.randomCycleTickBox,"check_yes")
-		end
-		ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-	elseif this.CurButton ~= nil and string.sub(this.CurButton, 13, 23) == "dropMyLife" then --READ! string.find is slow, using string.sub instead. Compares letters 13 to 23 with the String "dropMyLife". We start at 13 cause before that comes "_ifeDropBtn_" (so, the whole string would be _ifeDropBtn_dropMyLife)
-		this.minipage.mySection.dropdownLegions.expanded = not this.minipage.mySection.dropdownLegions.expanded
-		POC_minipag_dropdown_layout.lst.SelectedIdx = rema_database.data.legion
-		POC_minipag_dropdown_layout.lst.CursorIdx = rema_database.data.legion
-		POC_minipag_dropdown_layout.lst.FirstShownIdx = rema_database.data.legion
-
-	elseif this.CurButton ~= nil and string.sub(this.CurButton, 13, 25) == "dropdownExtra" then
-		this.minipage.mySection.dropdownExtra.expanded = not this.minipage.mySection.dropdownExtra.expanded
-		POC_minipag_dropdown_heroes_layout.lst.SelectedIdx = rema_database.data.extraUnit
-		POC_minipag_dropdown_heroes_layout.lst.CursorIdx = rema_database.data.extraUnit
-		POC_minipag_dropdown_heroes_layout.lst.FirstShownIdx = rema_database.data.extraUnit
-
-	elseif this.CurButton ~= nil and string.sub(this.CurButton, 13, 26) == "dropdownHeroes" then
-		this.minipage.mySection.dropdownHeroes.expanded = not this.minipage.mySection.dropdownHeroes.expanded
-		POC_minipag_dropdown_heroes_layout.lst.SelectedIdx = rema_database.data.chosenHero
-		POC_minipag_dropdown_heroes_layout.lst.CursorIdx = rema_database.data.chosenHero
-		POC_minipag_dropdown_heroes_layout.lst.FirstShownIdx = rema_database.data.chosenHero
-
-	elseif this.CurButton ~= nil and string.sub(this.CurButton, 13, 28) == "dropdownMapCycle" then
-		this.minipage.mySection.dropdownMapCycle.expanded = not this.minipage.mySection.dropdownMapCycle.expanded
-		POC_minipag_dropdown_heroes_layout.lst.SelectedIdx = rema_database.data.chosenDayTime
-		POC_minipag_dropdown_heroes_layout.lst.CursorIdx = rema_database.data.chosenDayTime
-		POC_minipag_dropdown_heroes_layout.lst.FirstShownIdx = rema_database.data.chosenDayTime
-
-	--elseif this.minipage.mySection.dropdownLegions.expanded == true then
-	--	this.minipage.mySection.dropdownLegions.expanded = false
-
-	--elseif this.minipage.mySection.dropdownExtra.expanded == true then
-	--	this.minipage.mySection.dropdownExtra.expanded	= false
-
-	--elseif this.minipage.mySection.dropdownHeroes.expanded == true then
-	--	this.minipage.mySection.dropdownHeroes.expanded	= false
-
 	end
-	POC_minipage_updateDropdownList(this)
+
+	updateDropdownList(this)
 end
+
+
 
 POC_minipag_dropdown_layout = {
 	tag = "dropMyLife",
@@ -415,7 +195,7 @@ function POC_fnBuildMinipage()
 	
 	-- this table holds all graphic elements we want to show on the minipage
 	local elements = {
-		mySection = NewIFContainer{
+		DropDownContainer = NewIFContainer{
 
 			legion = NewIFText {
 				x = 0,
@@ -431,7 +211,6 @@ function POC_fnBuildMinipage()
 				x = 400,
 				y = -2 * ScriptCB_GetFontHeight("gamefont_large_rema"),
 				halign = "hcenter",
-				--textw = 400, --Why do we need this? Simple! "Special Operations" is a long string and will NOT show properly without it!
 				nocreatebackground = 1,
 				font = "gamefont_large_rema",
 				string = "Enforcer",
@@ -455,6 +234,7 @@ function POC_fnBuildMinipage()
 				font = "gamefont_large_rema",
 				string = "Map Cycle",
 			},
+			
 			dropdownLegions = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_layout),
 			dropdownExtra = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_extra_layout),
 			dropdownHeroes = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_heroes_layout),
@@ -583,7 +363,7 @@ function POC_fnBuildMinipage()
 	-- ScreenRelativeX and ScreenRelativeY work only once in a child/parent tree
 	-- since remaster already needs this to position the minipage container, there
 	-- is a helper function to set element's relative position on the minipage.
-	ifelem_minipage_setRelativePos(elements.mySection, 0.0, 0.1)
+	ifelem_minipage_setRelativePos(elements.DropDownContainer, 0.0, 0.1)
 	ifelem_minipage_setRelativePos(elements.TickBoxContainer, 0.0, 0.1)
 	
 	-- put all callback functions in this table. Those can be stock shell callbacks
@@ -600,24 +380,23 @@ end
 
 
 
-function POC_printCurrentSettings()
-	print("POC: legion: ", rema_database.data.legion)
-	print("POC: extraUnit: ", rema_database.data.extraUnit)
-	print("POC: chosenHero: ", rema_database.data.chosenHero)
-	print("POC: chosenDayTime: ", rema_database.data.chosenDayTime)
-	print("POC: phase 1: ", rema_database.data.phase1)
-	print("POC: randomLegion: ", rema_database.data.randomLegion)
-	print("POC: randomSP: ", rema_database.data.randomSP)
-	print("POC: randomHeroes: ", rema_database.data.randomHeroes)
-	print("POC: randomCycle: ", rema_database.data.randomCycle)
+-----------------------------------------------------------------------------------------------------------
+-- Utility functions -- 
+-- Do NOT touch unless you know what you are doing
+
+-- print any key from the rema_database that matches the ones in the dvalues table we established to keep track of all our variables.
+function printCurrentSettings()
+    for k, v in pairs(rema_database.data) do
+        if rema_database_dvalues[k] ~= nil then
+            print(__scriptName__, k .. ": ", v)
+        end
+    end
 end
 
-
-
---Listen well
---I noticed that sometimes, some of the booleans are saved, the debugger would show true even if the texture was unticked
---It makes sense, they werent nil so they werent set to false, but the texture for the tickboxes are always "check_no" when booting up
---This shows the actual state, so one will not get fooled.
+-- Listen well
+-- I noticed that sometimes, some of the booleans are saved, the debugger would show true even if the texture was unticked
+-- It makes sense, they werent nil so they werent set to false, but the texture for the tickboxes are always "check_no" when booting up
+-- This shows the actual state, so one will not get fooled.
 function showActualTexture(bState)
 	if(bState) then
 		return "check_yes"
@@ -625,5 +404,69 @@ function showActualTexture(bState)
 		return "check_no"
 	end
 end
+
+-- This function updates the visually selected element of the dropdown and closes any other open dropdowns when a new one is opened.
+function updateDropdownList(this)
+	for _, dropdown in ipairs(dropdowns) do
+		if dropdown.dest.expanded == true then
+			IFObj_fnSetVis(dropdown.dest.listbox, true)
+			ListManager_fnAutoscroll(dropdown.dest.listbox, dropdown.stringList, dropdown.layout.lst)
+			closeOtherDropDowns(this, dropdown.dest)
+		else
+			IFObj_fnSetVis(dropdown.dest.listbox, false)
+			local selectedString = dropdown.stringList[rema_database.data[dropdown.dataField]]
+			RoundIFButtonLabel_fnSetString(dropdown.dest.button, selectedString)
+		end
+	end
+end
+
+function closeOtherDropDowns(this, drop)
+	for _, dropdown in ipairs(dropdowns) do
+		if dropdown.dest ~= drop then
+			dropdown.dest.expanded = false
+		end
+	end
+end
+
+-- Open / Close a dropdown, then update the dropdown to use the slot of the databaseEntry
+function toggleDropdown(minipage_dropdown_expanded, dropdown, databaseEntry)
+    minipage_dropdown_expanded = not minipage_dropdown_expanded
+    dropdown.lst.SelectedIdx = databaseEntry
+    dropdown.lst.CursorIdx = databaseEntry
+    dropdown.lst.FirstShownIdx = databaseEntry
+    return minipage_dropdown_expanded
+end
+
+-- This function handles the selection of an item from a dropdown list.
+-- It updates the selected item in the database and refreshes the dropdown list.
+function handleDropdownSelection(this, dropdown, dataField, listLength)
+	assert(rema_database.data[dataField], __scriptName__ .. "Data field does not exist in rema_database.data: " .. dataField)
+	if gMouseListBox == dropdown.listbox then
+		dropdown.expanded = false
+		local newIdx = gMouseListBox.Layout.CursorIdx
+		if newIdx and not (newIdx > listLength) then
+			if newIdx ~= rema_database.data[dataField] then
+				rema_database.data[dataField] = newIdx
+			end
+		end
+		updateDropdownList(this)
+	end
+end
+
+function updateCheckboxData(checkbox, dataField)
+    if rema_database.data[dataField] then
+        rema_database.data[dataField] = false
+        IFImage_fnSetTexture(checkbox, "check_no")
+    else
+        rema_database.data[dataField] = true
+        IFImage_fnSetTexture(checkbox, "check_yes")
+    end
+    ifelm_shellscreen_fnPlaySound(this.acceptSound)
+end
+
+
+
+-----------------------------------------------------------------------------------------------------------
+-- Build minipage --
 
 POC_fnBuildMinipage()
