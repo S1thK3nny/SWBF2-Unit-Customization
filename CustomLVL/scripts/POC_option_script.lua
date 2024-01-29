@@ -234,7 +234,7 @@ function POC_fnBuildMinipage()
 				font = "gamefont_large_rema",
 				string = "Map Cycle",
 			},
-			
+
 			dropdownLegions = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_layout),
 			dropdownExtra = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_extra_layout),
 			dropdownHeroes = ifelem_minipage_NewDropDownButton(POC_minipag_dropdown_heroes_layout),
@@ -440,18 +440,23 @@ end
 -- This function handles the selection of an item from a dropdown list.
 -- It updates the selected item in the database and refreshes the dropdown list.
 function handleDropdownSelection(this, dropdown, dataField, listLength)
-	assert(rema_database.data[dataField], __scriptName__ .. "Data field does not exist in rema_database.data: " .. dataField)
-	if gMouseListBox == dropdown.listbox then
-		dropdown.expanded = false
-		local newIdx = gMouseListBox.Layout.CursorIdx
-		if newIdx and not (newIdx > listLength) then
-			if newIdx ~= rema_database.data[dataField] then
-				rema_database.data[dataField] = newIdx
-			end
-		end
-		updateDropdownList(this)
-	end
+    assert(rema_database.data[dataField], __scriptName__ .. "Data field does not exist in rema_database.data: " .. dataField)
+
+    -- Close other dropdowns
+    closeOtherDropDowns(this, dropdown)
+
+    if gMouseListBox == dropdown.listbox then
+        dropdown.expanded = false
+        local newIdx = gMouseListBox.Layout.CursorIdx
+        if newIdx and not (newIdx > listLength) then
+            if newIdx ~= rema_database.data[dataField] then
+                rema_database.data[dataField] = newIdx
+            end
+        end
+        updateDropdownList(this)
+    end
 end
+
 
 function updateCheckboxData(checkbox, dataField)
     if rema_database.data[dataField] then
